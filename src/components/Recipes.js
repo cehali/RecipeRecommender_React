@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 import {GridList, GridTile} from 'material-ui/GridList'
 import IconButton from 'material-ui/IconButton'
 import Subheader from 'material-ui/Subheader'
@@ -14,8 +15,8 @@ const styles = {
 };
 
 class GridListExampleSimple extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             recipes: []
         }
@@ -28,7 +29,7 @@ class GridListExampleSimple extends Component {
           snapshot.forEach(function(child) {
             recipesReceived.push({
                 name: child.val().name,
-                photo: child.val().images,
+                photo: child.val().images[0].hostedLargeUrl,
                 _key: child.key
             });
           });
@@ -36,7 +37,6 @@ class GridListExampleSimple extends Component {
             console.log("The read failed: " + error.message);
         }).then(() => {
             this.setState({recipes: recipesReceived});
-            console.log(recipesReceived[0].photo[0].hostedLargeUrl)            
         }); 
       }
     
@@ -54,10 +54,11 @@ class GridListExampleSimple extends Component {
                     >
                     {this.state.recipes.map((tile) => (
                         <GridTile
-                        title={tile.name}
-                        actionIcon={<IconButton><StarBorder color="white" /></IconButton>}
+                            title={tile.name}
+                            actionIcon={<IconButton><StarBorder color="white" /></IconButton>}
+                            containerElement={<Link to={`/recipes/${tile._key}`}>{tile._key}</ Link>}
                         >
-                        <img src={tile.photo[0].hostedLargeUrl} />
+                        <img src={tile.photo} alt=''/>
                         </GridTile>
                     ))}
                     </GridList>

@@ -13,7 +13,7 @@ const loginStyles = {
 	padding: '10px'
 }
 
-const buttonStyle = {
+const loginInpuStyle = {
 	width: '100%',
 }
 
@@ -110,7 +110,7 @@ class Login extends Component {
 
     render() {
 		if (this.state.redirect === true) {
-			return <Redirect to='/' />
+			return <Redirect to='/recipes' />
 		}
         return (
 			<MuiThemeProvider>
@@ -145,7 +145,7 @@ class Login extends Component {
 						autoHideDuration={4000}
 						onRequestClose={this.handleRequestClose}
 					/>
-					<RaisedButton label="Log In with Facebook" primary={true} style={buttonStyle} 
+					<RaisedButton label="Log In with Facebook" primary={true} style={loginInpuStyle} 
 						onClick={() => { this.authWithFacebook() }}/>
 					<br /> 
 					<Divider />					
@@ -157,14 +157,16 @@ class Login extends Component {
 							type='email'
 							value={this.state.emailValue}
 							onChange={this.handleEmailChange}
+							style = {loginInpuStyle}
 						/>
 						<TextField
 							floatingLabelText="Password"
 							type='password'
 							value={this.state.passwordValue}
 							onChange={this.handlePasswordChange}
+							style = {loginInpuStyle}
 						/>
-						<RaisedButton label="Log In" primary={true} style={buttonStyle}
+						<RaisedButton label="Log In" primary={true} style={loginInpuStyle}
 							onClick={() => { this.authWithEmailPassword() }}/>
 					</form>
 				</div>

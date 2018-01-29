@@ -9,8 +9,8 @@ const style = {
 	refresh: {
 	  display: 'inline-block',
 	  position: 'relative',
-	},
-};
+	}
+}
 
 class Logout extends Component {
 	constructor() {

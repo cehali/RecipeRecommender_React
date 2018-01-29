@@ -1,12 +1,13 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import { BrowserRouter, Route } from 'react-router-dom'
-import RefreshIndicator from 'material-ui/RefreshIndicator';
-import Header  from './components/Header';
-import Footer  from './components/Footer';
-import Login from './components/Login';
-import Logout from './components/Logout';
-import Recipes  from './components/Recipes';
-import { app } from './base';
+import RefreshIndicator from 'material-ui/RefreshIndicator'
+import Header  from './components/Header'
+import Footer  from './components/Footer'
+import Login from './components/Login'
+import Logout from './components/Logout'
+import Recipes  from './components/Recipes'
+import Recipe  from './components/Recipe'
+import { app } from './base'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 
 const style = {
@@ -72,7 +73,8 @@ class App extends Component {
                   <div className='workspace'>
                     <Route exact path='/login' component={Login} />
                     <Route exact path='/logout' component={Logout} />
-                    <Recipes />
+                    <Route exact path='/recipes' component={Recipes} />
+                    <Route path="/recipes/:recipeId" component={Recipe} />
                   </div>
                 </div>
               </div>
