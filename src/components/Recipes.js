@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import {GridList, GridTile} from 'material-ui/GridList'
 import IconButton from 'material-ui/IconButton'
-import Subheader from 'material-ui/Subheader'
 import StarBorder from 'material-ui/svg-icons/toggle/star-border'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import { app } from '../base'
@@ -29,7 +28,7 @@ class GridListExampleSimple extends Component {
           snapshot.forEach(function(child) {
             recipesReceived.push({
                 name: child.val().name,
-                photo: child.val().images[0].hostedLargeUrl,
+                photo: child.val().images[0].imageUrlsBySize[360],
                 _key: child.key
             });
           });

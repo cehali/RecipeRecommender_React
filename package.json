@@ -5,13 +5,17 @@
   "dependencies": {
     "@blueprintjs/core": "^1.35.2",
     "material-ui": "^0.20.0",
+    "material-ui-fullscreen-dialog": "^0.7.2",
     "re-base": "^3.2.2",
     "react": "^16.2.0",
     "react-addons-css-transition-group": "^15.6.2",
     "react-dom": "^16.2.0",
+    "react-popup": "^0.9.2",
+    "react-render-html": "^0.6.0",
     "react-router": "^3.0.5",
     "react-router-dom": "^4.2.2",
-    "react-scripts": "1.1.0"
+    "react-scripts": "1.1.0",
+    "sanitize-html": "^1.17.0"
   },
   "scripts": {
     "start": "react-scripts start",
