@@ -1,15 +1,9 @@
 import React, { Component, Image } from 'react'
 import { List, ListItem, nestedItems, RefreshIndicator, Table, TableBody, TableRow, TableRowColumn, RaisedButton, FlatButton, Dialog } from 'material-ui'
-import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
-import { push, Redirect } from 'react-router-dom'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import { app } from '../base'
 import FullscreenDialog from 'material-ui-fullscreen-dialog'
 
-const customContentStyle = {
-	width: '100%',
-	maxWidth: 'none',
-  };
 
 class Recipe extends Component {
     constructor(props) {
@@ -76,8 +70,10 @@ class Recipe extends Component {
 		this.setState({open: false});
 	}
   
+
+	/* toDo: if iframe doesnt load, open in another window/tab */
     render() {
-		return  (Object.keys(this.state.recipe).length === 0 && this.state.recipe.constructor === Object)
+		return (Object.keys(this.state.recipe).length === 0 && this.state.recipe.constructor === Object)
 			? (<MuiThemeProvider>
 				<div style={{ textAlign: 'center', position: 'absolute', top: '25%', left: '50%'}}>
 					<h3>Loading</h3>
@@ -96,9 +92,10 @@ class Recipe extends Component {
 						<img src={this.state.recipe.photo} alt=''/>
 					</p>
 					<ListItem primaryText={this.state.recipe.name} disabled={true} style={{ textAlign: 'center'}}/>
-					<ListItem primaryText={
-						`Total time: ${this.state.recipe.totalTime} Servings: ${this.state.recipe.nrservings}`} disabled={true}
-						style={{ textAlign: 'center'}}/>
+					<ListItem primaryText={<span>{'Total time: '}{this.state.recipe.totalTime ? <span>{this.state.recipe.totalTime}</span> : '-'} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						{'Servings: '}{this.state.recipe.nrservings ? <span>{this.state.recipe.nrservings}</span> : '-'} </span>}
+						disabled={true} style={{ textAlign: 'center' }}/>
+
 					<ListItem primaryText='Ingredients:'
 						primaryTogglesNestedList={true}
 						nestedItems = {this.state.recipe.ingredients.map((ingr) => (
@@ -124,80 +121,80 @@ class Recipe extends Component {
 								<TableBody displayRowCheckbox={false} stripedRows={true}>
 									<TableRow>
 										<TableRowColumn>Calories</TableRowColumn>
-										<TableRowColumn>{this.state.recipe.calories.value}</TableRowColumn>
-										<TableRowColumn>{this.state.recipe.calories.unit.abbreviation}</TableRowColumn>
+										<TableRowColumn>{<span>{this.state.recipe.calories ? <span>{this.state.recipe.calories.value}</span> : '-'}</span>}</TableRowColumn>
+										<TableRowColumn>{<span>{this.state.recipe.calories ? <span>{this.state.recipe.calories.unit.abbreviation}</span> : '-'}</span>}</TableRowColumn>
 									</TableRow>
 									<TableRow>
-										<TableRowColumn>Calories from fat</TableRowColumn>
-										<TableRowColumn>{this.state.recipe.fatKcal.value}</TableRowColumn>
-										<TableRowColumn>{this.state.recipe.fatKcal.unit.abbreviation}</TableRowColumn>
+										<TableRowColumn>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Calories from fat</TableRowColumn>
+										<TableRowColumn>{<span>{this.state.recipe.fatKcal ? <span>{this.state.recipe.fatKcal.value}</span> : '-'}</span>}</TableRowColumn>
+										<TableRowColumn>{<span>{this.state.recipe.fatKcal ? <span>{this.state.recipe.fatKcal.unit.abbreviation}</span> : '-'}</span>}</TableRowColumn>
 									</TableRow>
 									<TableRow>
 										<TableRowColumn>Total Fat</TableRowColumn>
-										<TableRowColumn>{this.state.recipe.totalFat.value}</TableRowColumn>
-										<TableRowColumn>{this.state.recipe.totalFat.unit.abbreviation}</TableRowColumn>
+										<TableRowColumn>{<span>{this.state.recipe.totalFat ? <span>{this.state.recipe.totalFat.value}</span> : '-'}</span>}</TableRowColumn>
+										<TableRowColumn>{<span>{this.state.recipe.totalFat ? <span>{this.state.recipe.totalFat.unit.abbreviation}</span> : '-'}</span>}</TableRowColumn>
 									</TableRow>
 									<TableRow>
-										<TableRowColumn>Saturated Fat</TableRowColumn>
-										<TableRowColumn>{this.state.recipe.satFat.value}</TableRowColumn>
-										<TableRowColumn>{this.state.recipe.satFat.unit.abbreviation}</TableRowColumn>
+										<TableRowColumn>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Saturated Fat</TableRowColumn>
+										<TableRowColumn>{<span>{this.state.recipe.satFat ? <span>{this.state.recipe.satFat.value}</span> : '-'}</span>}</TableRowColumn>
+										<TableRowColumn>{<span>{this.state.recipe.satFat ? <span>{this.state.recipe.satFat.unit.abbreviation}</span> : '-'}</span>}</TableRowColumn>
 									</TableRow>
 									<TableRow>
-										<TableRowColumn>Trans Fat</TableRowColumn>
-										<TableRowColumn>{
-											(parseFloat(this.state.recipe.totalFat.value) - (parseFloat(this.state.recipe.satFat.value) + parseFloat(this.state.recipe.puFat.value) + parseFloat(this.state.recipe.muFat.value))).toFixed(2)
-										}</TableRowColumn>
-										<TableRowColumn>{this.state.recipe.satFat.unit.abbreviation}</TableRowColumn>
+										<TableRowColumn>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Trans Fat</TableRowColumn>
+										<TableRowColumn>{(parseFloat(this.state.recipe.totalFat ? this.state.recipe.totalFat.value : 0) - (parseFloat(this.state.recipe.satFat ? this.state.recipe.satFat.value : 0) 
+												+ parseFloat(this.state.recipe.puFat ? this.state.recipe.puFat.value : 0) + parseFloat(this.state.recipe.muFat ? this.state.recipe.muFat.value : 0))).toFixed(2)}
+										</TableRowColumn>
+										<TableRowColumn><span>{this.state.recipe.satFat ? <span>{this.state.recipe.satFat.unit.abbreviation}</span> : '-'}</span>}</TableRowColumn>
 									</TableRow>
 									<TableRow>
 										<TableRowColumn>Protein</TableRowColumn>
-										<TableRowColumn>{this.state.recipe.protein.value}</TableRowColumn>
-										<TableRowColumn>{this.state.recipe.protein.unit.abbreviation}</TableRowColumn>
+										<TableRowColumn>{<span>{this.state.recipe.protein ? <span>{this.state.recipe.protein.value}</span> : '-'}</span>}</TableRowColumn>
+										<TableRowColumn>{<span>{this.state.recipe.protein ? <span>{this.state.recipe.protein.unit.abbreviation}</span> : '-'}</span>}</TableRowColumn>
 									</TableRow>
 									<TableRow>
 										<TableRowColumn>Total Carbohydrate</TableRowColumn>
-										<TableRowColumn>{this.state.recipe.totalCarb.value}</TableRowColumn>
-										<TableRowColumn>{this.state.recipe.totalCarb.unit.abbreviation}</TableRowColumn>
+										<TableRowColumn>{<span>{this.state.recipe.totalCarb ? <span>{this.state.recipe.totalCarb.value}</span> : '-'}</span>}</TableRowColumn>
+										<TableRowColumn>{<span>{this.state.recipe.totalCarb ? <span>{this.state.recipe.totalCarb.unit.abbreviation}</span> : '-'}</span>}</TableRowColumn>
 									</TableRow>
 									<TableRow>
-										<TableRowColumn>Dietary Fiber</TableRowColumn>
-										<TableRowColumn>{this.state.recipe.dieteryFiber.value}</TableRowColumn>
-										<TableRowColumn>{this.state.recipe.dieteryFiber.unit.abbreviation}</TableRowColumn>
+										<TableRowColumn>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Dietary Fiber</TableRowColumn>
+										<TableRowColumn>{<span>{this.state.recipe.dieteryFiber ? <span>{this.state.recipe.dieteryFiber.value}</span> : '-'}</span>}</TableRowColumn>
+										<TableRowColumn>{<span>{this.state.recipe.dieteryFiber ? <span>{this.state.recipe.dieteryFiber.unit.abbreviation}</span> : '-'}</span>}</TableRowColumn>
 									</TableRow>
 									<TableRow>
-										<TableRowColumn>Sugars</TableRowColumn>
-										<TableRowColumn>{this.state.recipe.sugar.value}</TableRowColumn>
-										<TableRowColumn>{this.state.recipe.sugar.unit.abbreviation}</TableRowColumn>
+										<TableRowColumn>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sugars</TableRowColumn>
+										<TableRowColumn>{<span>{this.state.recipe.sugar ? <span>{this.state.recipe.sugar.value}</span> : '-'}</span>}</TableRowColumn>
+										<TableRowColumn>{<span>{this.state.recipe.sugar ? <span>{this.state.recipe.sugar.unit.abbreviation}</span> : '-'}</span>}</TableRowColumn>
 									</TableRow>
 									<TableRow>
 										<TableRowColumn>Cholesterol</TableRowColumn>
-										<TableRowColumn>{this.state.recipe.cholesterol.value}</TableRowColumn>
-										<TableRowColumn>{this.state.recipe.cholesterol.unit.abbreviation}</TableRowColumn>
+										<TableRowColumn>{<span>{this.state.recipe.cholesterol ? <span>{this.state.recipe.cholesterol.value}</span> : '-'}</span>}</TableRowColumn>
+										<TableRowColumn>{<span>{this.state.recipe.cholesterol ? <span>{this.state.recipe.cholesterol.unit.abbreviation}</span> : '-'}</span>}</TableRowColumn>
 									</TableRow>
 									<TableRow>
 										<TableRowColumn>Potassium</TableRowColumn>
-										<TableRowColumn>{this.state.recipe.potassium.value}</TableRowColumn>
-										<TableRowColumn>{this.state.recipe.potassium.unit.abbreviation}</TableRowColumn>
+										<TableRowColumn>{<span>{this.state.recipe.potassium ? <span>{this.state.recipe.potassium.value}</span> : '-'}</span>}</TableRowColumn>
+										<TableRowColumn>{<span>{this.state.recipe.potassium ? <span>{this.state.recipe.potassium.unit.abbreviation}</span> : '-'}</span>}</TableRowColumn>
 									</TableRow>
 									<TableRow>
 										<TableRowColumn>Vitamin A</TableRowColumn>
-										<TableRowColumn>{this.state.recipe.vitA.value}</TableRowColumn>
-										<TableRowColumn>{this.state.recipe.vitA.unit.abbreviation}</TableRowColumn>
+										<TableRowColumn>{<span>{this.state.recipe.vitA ? <span>{this.state.recipe.vitA.value }</span> : '-'}</span>}</TableRowColumn>
+										<TableRowColumn>{<span>{this.state.recipe.vitA ? <span>{this.state.recipe.vitA.unit.abbreviation}</span> : '-'}</span>}</TableRowColumn>
 									</TableRow>
 									<TableRow>
 										<TableRowColumn>Vitamin C</TableRowColumn>
-										<TableRowColumn>{this.state.recipe.vitC.value}</TableRowColumn>
-										<TableRowColumn>{this.state.recipe.vitC.unit.abbreviation}</TableRowColumn>
+										<TableRowColumn>{<span>{this.state.recipe.vitC ? <span>{this.state.recipe.vitC.value}</span> : '-'}</span>}</TableRowColumn>
+										<TableRowColumn>{<span>{this.state.recipe.vitC ? <span>{this.state.recipe.vitC.unit.abbreviation}</span> : '-'}</span>}</TableRowColumn>
 									</TableRow>
 									<TableRow>
 										<TableRowColumn>Calcium</TableRowColumn>
-										<TableRowColumn>{this.state.recipe.calcium.value}</TableRowColumn>
-										<TableRowColumn>{this.state.recipe.calcium.unit.abbreviation}</TableRowColumn>
+										<TableRowColumn>{<span>{this.state.recipe.calcium ? <span>{this.state.recipe.calcium.value}</span> : '-'}</span>}</TableRowColumn>
+										<TableRowColumn>{<span>{this.state.recipe.calcium ? <span>{this.state.recipe.calcium.unit.abbreviation}</span> : '-'}</span>}</TableRowColumn>
 									</TableRow>
 									<TableRow>
 										<TableRowColumn>Iron</TableRowColumn>
-										<TableRowColumn>{this.state.recipe.iron.value}</TableRowColumn>
-										<TableRowColumn>{this.state.recipe.iron.unit.abbreviation}</TableRowColumn>
+										<TableRowColumn>{<span>{this.state.recipe.iron ? <span>{this.state.recipe.iron.value}</span> : '-'}</span>}</TableRowColumn>
+										<TableRowColumn>{<span>{this.state.recipe.iron ? <span>{this.state.recipe.iron.unit.abbreviation}</span> : '-'}</span>}</TableRowColumn>
 									</TableRow>
 								</TableBody>
 						  	</Table>

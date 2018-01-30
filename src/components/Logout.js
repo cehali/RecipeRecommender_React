@@ -26,23 +26,23 @@ class Logout extends Component {
 	}
 
     render() {
-			if (this.state.redirect === true) {
-				return <Redirect to='/' />
-			}
-			return (
-				<MuiThemeProvider>
-					<div style={{ textAlign: 'center', position: 'absolute', top: '25%', left: '50%'}}>
-						<h3>Logging Out</h3>
-						<RefreshIndicator
-							size={50}
-							status="loading"
-							style={style.refresh}
-							left={0}
-							top={0}
-						/>
-					</div>
-				</MuiThemeProvider>
-			)       
+		if (this.state.redirect === true) {
+			return <Redirect to='/' />
+		}
+		return (
+			<MuiThemeProvider>
+				<div style={{ textAlign: 'center', position: 'absolute', top: '25%', left: '50%'}}>
+					<h3>Logging Out</h3>
+					<RefreshIndicator
+						size={50}
+						status="loading"
+						style={style.refresh}
+						left={0}
+						top={0}
+					/>
+				</div>
+			</MuiThemeProvider>
+		)       
     }
 }
 

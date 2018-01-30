@@ -10,7 +10,8 @@ class Header extends Component {
         this.state = {open: false};
     }
     
-    handleToggle = () => this.setState({open: !this.state.open});
+    handleToggle = () => {this.state.open === true ? this.setState({open: false}): this.setState({open: true})};
+
 
     render() {
         return (
@@ -19,29 +20,22 @@ class Header extends Component {
                 {this.props.authenticated
                     ?<div>
                     <AppBar
-                        title="RecipeRecommender"
-                        iconElementRight={<FlatButton label="Log Out" containerElement={<Link to="/logout" />}/>}
+                        title='RecipeRecommender'
+                        iconElementRight={<FlatButton label='Log Out' containerElement={<Link to='/logout' />}/>}
                         onLeftIconButtonClick={this.handleToggle}
                     />
                     <Drawer open={this.state.open}
                         docked={false}
                         onRequestChange={(open) => this.setState({open})}>
-                        <MenuItem>Menu Item</MenuItem>
-                        <MenuItem>Menu Item 2</MenuItem>
+                        <MenuItem containerElement={<Link to='/search' />} onClick={this.handleToggle}>Search Recipe</MenuItem>
                     </Drawer>
                     </div>
                     :<div>
                     <AppBar
-                        title="RecipeRecommender"
-                        iconElementRight={<FlatButton label="Register/Log In" containerElement={<Link to="/login" />}/>}
-                        onLeftIconButtonClick={this.handleToggle}
+                        title='RecipeRecommender'
+                        iconElementRight={<FlatButton label='Register/Log In' containerElement={<Link to='/login' />}/>}
+                        showMenuIconButton={false}
                     />
-                    <Drawer open={this.state.open}
-                        docked={false}
-                        onRequestChange={(open) => this.setState({open})}>
-                        <MenuItem>Menu Item</MenuItem>
-                        <MenuItem>Menu Item 2</MenuItem>
-                    </Drawer>
                     </div>
                 }
                 </div>

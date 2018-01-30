@@ -1,16 +1,14 @@
 import React, { Component } from 'react'
 import { Redirect } from 'react-router-dom'
 import { app, facebookProvider } from '../base'
-import { Snackbar, RaisedButton, Divider, TextField } from 'material-ui'
+import { Snackbar, RaisedButton, Divider, TextField, Paper } from 'material-ui'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 
-const loginStyles = {
+const loginStyle = {
 	width: '90%',
 	maxWidth: '315px',
 	margin: '20px auto',
-	border: '1px solid #ddd',
-	borederRadius: '5px',
-	padding: '10px'
+	padding: '10px',
 }
 
 const loginInpuStyle = {
@@ -114,7 +112,6 @@ class Login extends Component {
 		}
         return (
 			<MuiThemeProvider>
-				<div style={loginStyles}>
 					<Snackbar
 						open={this.state.registerOpen}
 						message='New user has been made'
@@ -145,11 +142,10 @@ class Login extends Component {
 						autoHideDuration={4000}
 						onRequestClose={this.handleRequestClose}
 					/>
-					<RaisedButton label="Log In with Facebook" primary={true} style={loginInpuStyle} 
-						onClick={() => { this.authWithFacebook() }}/>
-					<br /> 
-					<Divider />					
-					<form>
+					<Paper style={loginStyle} zDepth={2}>
+						<RaisedButton label="Log In with Facebook" primary={true} style={loginInpuStyle} 
+							onClick={() => { this.authWithFacebook() }}/>
+						<Divider />					
 						<h3>Note</h3>
 						If you don't have account already, this form will create your account.
 						<TextField
@@ -168,8 +164,7 @@ class Login extends Component {
 						/>
 						<RaisedButton label="Log In" primary={true} style={loginInpuStyle}
 							onClick={() => { this.authWithEmailPassword() }}/>
-					</form>
-				</div>
+					</Paper>
 			</ MuiThemeProvider>
         )
     }

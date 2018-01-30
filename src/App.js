@@ -7,6 +7,7 @@ import Login from './components/Login'
 import Logout from './components/Logout'
 import Recipes  from './components/Recipes'
 import Recipe  from './components/Recipe'
+import Search from './components/Search'
 import { app } from './base'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 
@@ -74,6 +75,7 @@ class App extends Component {
                     <Route exact path='/login' component={Login} />
                     <Route exact path='/logout' component={Logout} />
                     <Route exact path='/recipes' component={Recipes} />
+                    <Route exact path='/search' component={Search} />
                     <Route path="/recipes/:recipeId" component={Recipe} />
                   </div>
                 </div>
