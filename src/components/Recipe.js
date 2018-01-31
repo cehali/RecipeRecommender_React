@@ -3,6 +3,7 @@ import { List, ListItem, nestedItems, RefreshIndicator, Table, TableBody, TableR
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import { app } from '../base'
 import FullscreenDialog from 'material-ui-fullscreen-dialog'
+import { Link } from 'react-router-dom'
 
 
 class Recipe extends Component {
@@ -45,7 +46,7 @@ class Recipe extends Component {
 						vitA: child.val().nutritionEstimates.find(obj => obj.attribute === 'VITA_RAE'),
 						vitC: child.val().nutritionEstimates.find(obj => obj.attribute === 'VITC'),
 						calcium: child.val().nutritionEstimates.find(obj => obj.attribute === 'CA'),
-						iron: child.val().nutritionEstimates.find(obj => obj.attribute === 'CA'),
+						iron: child.val().nutritionEstimates.find(obj => obj.attribute === 'FE'),
 
 						_key: child.key
 					};
@@ -71,7 +72,7 @@ class Recipe extends Component {
 	}
   
 
-	/* toDo: if iframe doesnt load, open in another window/tab */
+	/* toDo: if iframe doesnt load, open in another window/tab <iframe src={this.state.recipe.source} frameborder="0" style={{overflow:'hidden', height:'100%', width:'100%', position:'absolute', top:'0px', left:'0px', right:'0px', bottom:'0px'}} height="100%" width="100%"></iframe>*/
     render() {
 		return (Object.keys(this.state.recipe).length === 0 && this.state.recipe.constructor === Object)
 			? (<MuiThemeProvider>
@@ -102,18 +103,7 @@ class Recipe extends Component {
 							<ListItem primaryText={ingr}/>
 						))}
 					/>
-					<RaisedButton label="Read Directions" primary={true} onClick={this.handleOpen} style={{width:'100%'}}/>
-						<FullscreenDialog
-							open={this.state.open}						
-							actionButton={<FlatButton
-								label='Done'
-								onClick={this.handleClose}
-							/>}
-						>
-						<div style={{margin:'0px', padding:'0px', overflow:'hidden'}}>
-							<iframe src={this.state.recipe.source} frameborder="0" style={{overflow:'hidden', height:'100%', width:'100%', position:'absolute', top:'0px', left:'0px', right:'0px', bottom:'0px'}} height="100%" width="100%"></iframe>
-						</div>
-					</FullscreenDialog>
+					<RaisedButton label="Read Directions" primary={true} containerElement={<Link to={this.state.recipe.source} target="_blank"/>} style={{width:'100%'}}/>
 					<ListItem primaryText='Nutrition:'
 						primaryTogglesNestedList={true}
 						nestedItems = {[

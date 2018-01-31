@@ -28,6 +28,7 @@ class Header extends Component {
                         docked={false}
                         onRequestChange={(open) => this.setState({open})}>
                         <MenuItem containerElement={<Link to='/search' />} onClick={this.handleToggle}>Search Recipe</MenuItem>
+                        <MenuItem containerElement={<Link to='/coldstart' />} onClick={this.handleToggle}>Cold Start</MenuItem>
                     </Drawer>
                     </div>
                     :<div>

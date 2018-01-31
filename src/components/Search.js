@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { app } from '../base'
 import { Link } from 'react-router-dom'
-import { RefreshIndicator, AutoComplete, floatingLabelText, filter } from 'material-ui'
+import { RefreshIndicator, AutoComplete, floatingLabelText, filter, List, ListItem, IconMenu, MenuItem } from 'material-ui'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import index from 'material-ui/AutoComplete'
 
@@ -68,11 +68,11 @@ class Search extends Component {
 			:<MuiThemeProvider>
 				<AutoComplete
 					floatingLabelText="Search Recipe"
-				    filter={AutoComplete.caseInsensitiveFilter}
+					filter={AutoComplete.caseInsensitiveFilter}
 					dataSource={this.getDataSource(this.state.recipes)}
 					fullWidth={true}
-					onNewRequest={this.showFoundedRecipe}
-				/>
+					onNewRequest={this.showFoundedRecipe}>
+				</AutoComplete>
 			</MuiThemeProvider> 
 		)
 	}

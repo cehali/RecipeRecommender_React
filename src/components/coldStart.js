@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import {GridList, GridTile} from 'material-ui/GridList'
-import IconButton from 'material-ui/IconButton'
-import StarBorder from 'material-ui/svg-icons/toggle/star-border'
+import { GridList, GridTile, RaisedButton } from 'material-ui'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import { app } from '../base'
 
@@ -13,11 +11,12 @@ const styles = {
   },
 };
 
-class Recipes extends Component {
+class coldStart extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            recipes: []
+            recipes: [],
+            nrStage: 0
         }
     }
 
@@ -29,6 +28,7 @@ class Recipes extends Component {
             recipesReceived.push({
                 name: child.val().name,
                 photo: child.val().images[0].imageUrlsBySize[360],
+                dishType: child.val().attributes.course,
                 _key: child.key
             });
           });
@@ -37,33 +37,24 @@ class Recipes extends Component {
         }).then(() => {
             this.setState({recipes: recipesReceived});
         }); 
-      }
+    }
     
-      componentDidMount = () => {
-        this.getItems();
-      }
-    
+    componentDidMount = () => {
+    this.getItems();
+    }
+
+    goToNextStage = () => {
+        this.setState({goToNextStage: (this.state.nrStage + 1)})
+    }
+
     render() {
         return (
             <MuiThemeProvider>
-                <GridList
-                cellHeight={180}
-                style={styles.gridList}
-                >
-                {this.state.recipes.map((tile) => (
-                    <GridTile
-                        title={tile.name}
-                        actionIcon={<IconButton><StarBorder color="white" /></IconButton>}
-                        containerElement={<Link to={`/recipes/${tile._key}`}>{tile._key}</ Link>}
-                    >
-                    <img src={tile.photo} alt=''/>
-                    </GridTile>
-                ))}
-                </GridList>
-            </ MuiThemeProvider>
+                <RaisedButton label="NEXT" primary={true} onClick={this.goToNextStage()}/>
+            </MuiThemeProvider>
         )
     }
     
 }
 
-export default Recipes;
+export default coldStart;
