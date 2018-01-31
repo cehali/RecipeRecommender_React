@@ -72,7 +72,6 @@ class Recipe extends Component {
 	}
   
 
-	/* toDo: if iframe doesnt load, open in another window/tab <iframe src={this.state.recipe.source} frameborder="0" style={{overflow:'hidden', height:'100%', width:'100%', position:'absolute', top:'0px', left:'0px', right:'0px', bottom:'0px'}} height="100%" width="100%"></iframe>*/
     render() {
 		return (Object.keys(this.state.recipe).length === 0 && this.state.recipe.constructor === Object)
 			? (<MuiThemeProvider>
@@ -134,7 +133,7 @@ class Recipe extends Component {
 										<TableRowColumn>{(parseFloat(this.state.recipe.totalFat ? this.state.recipe.totalFat.value : 0) - (parseFloat(this.state.recipe.satFat ? this.state.recipe.satFat.value : 0) 
 												+ parseFloat(this.state.recipe.puFat ? this.state.recipe.puFat.value : 0) + parseFloat(this.state.recipe.muFat ? this.state.recipe.muFat.value : 0))).toFixed(2)}
 										</TableRowColumn>
-										<TableRowColumn><span>{this.state.recipe.satFat ? <span>{this.state.recipe.satFat.unit.abbreviation}</span> : '-'}</span>}</TableRowColumn>
+										<TableRowColumn><span>{this.state.recipe.satFat ? <span>{this.state.recipe.satFat.unit.abbreviation}</span> : '-'}</span></TableRowColumn>
 									</TableRow>
 									<TableRow>
 										<TableRowColumn>Protein</TableRowColumn>

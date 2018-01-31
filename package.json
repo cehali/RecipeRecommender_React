@@ -6,6 +6,7 @@
     "@blueprintjs/core": "^1.35.2",
     "material-ui": "^0.20.0",
     "material-ui-fullscreen-dialog": "^0.7.2",
+    "material-ui-rating": "^1.4.1",
     "re-base": "^3.2.2",
     "react": "^16.2.0",
     "react-addons-css-transition-group": "^15.6.2",

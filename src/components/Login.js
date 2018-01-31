@@ -11,7 +11,7 @@ const loginStyle = {
 	padding: '10px',
 }
 
-const loginInpuStyle = {
+const loginInputStyle = {
 	width: '100%',
 }
 
@@ -143,9 +143,9 @@ class Login extends Component {
 						onRequestClose={this.handleRequestClose}
 					/>
 					<Paper style={loginStyle} zDepth={2}>
-						<RaisedButton label="Log In with Facebook" primary={true} style={loginInpuStyle} 
+						<RaisedButton label="Log In with Facebook" primary={true} style={loginInputStyle} 
 							onClick={() => { this.authWithFacebook() }}/>
-						<Divider />					
+						<Divider/>					
 						<h3>Note</h3>
 						If you don't have account already, this form will create your account.
 						<TextField
@@ -153,19 +153,19 @@ class Login extends Component {
 							type='email'
 							value={this.state.emailValue}
 							onChange={this.handleEmailChange}
-							style = {loginInpuStyle}
+							style = {loginInputStyle}
 						/>
 						<TextField
 							floatingLabelText="Password"
 							type='password'
 							value={this.state.passwordValue}
 							onChange={this.handlePasswordChange}
-							style = {loginInpuStyle}
+							style = {loginInputStyle}
 						/>
-						<RaisedButton label="Log In" primary={true} style={loginInpuStyle}
+						<RaisedButton label="Log In" primary={true} style={loginInputStyle}
 							onClick={() => { this.authWithEmailPassword() }}/>
 					</Paper>
-			</ MuiThemeProvider>
+			</MuiThemeProvider>
         )
     }
 }

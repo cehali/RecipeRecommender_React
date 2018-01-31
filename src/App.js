@@ -5,8 +5,9 @@ import Header  from './components/Header'
 import Footer  from './components/Footer'
 import Login from './components/Login'
 import Logout from './components/Logout'
+import FirstUse from './components/FirstUse'
+import ColdStart from './components/ColdStart'
 import Recipes  from './components/Recipes'
-import coldStart from './components/coldStart'
 import Recipe  from './components/Recipe'
 import Search from './components/Search'
 import { app } from './base'
@@ -75,7 +76,8 @@ class App extends Component {
                   <div className='workspace'>
                     <Route exact path='/login' component={Login} />
                     <Route exact path='/logout' component={Logout} />
-                    <Route exact path='/coldstart' component={coldStart} />
+                    <Route exact path='/firstuse' component={FirstUse} />
+                    <Route exact path='/coldstart' component={ColdStart} />
                     <Route exact path='/recipes' component={Recipes} />
                     <Route exact path='/search' component={Search} />
                     <Route path="/recipes/:recipeId" component={Recipe} />
