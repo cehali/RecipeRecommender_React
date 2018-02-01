@@ -86,7 +86,7 @@ class App extends Component {
               </div>
             </BrowserRouter>
         </div>
-      );
+      )
     } else {
       return (
         <div style={{maxWidth: '1160px', margin: '0 auto'}}>
