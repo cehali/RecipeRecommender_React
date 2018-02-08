@@ -2,7 +2,15 @@ import React, { Component } from 'react'
 import { Redirect } from 'react-router-dom'
 import { app, facebookProvider } from '../base'
 import { Snackbar, RaisedButton, Divider, TextField, Paper } from 'material-ui'
+import {blueGrey900} from 'material-ui/styles/colors'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import getMuiTheme from 'material-ui/styles/getMuiTheme'
+
+const muiTheme = getMuiTheme({
+    palette: {
+        primary1Color: blueGrey900,
+    }
+})
 
 const loginStyle = {
 	width: '90%',
@@ -39,10 +47,14 @@ class Login extends Component {
 				if (error) {
 					this.setState({ unableloginFbOpen: true })
 				} else {
-					this.setState({ 
-						loginOpen: true,
-						redirect: true 
-					})
+					if (result.user.metadata.a === result.user.metadata.b) {
+						this.props.history.push('/firstuse')
+					} else {
+						this.setState({ 
+							loginOpen: true,
+						})
+						this.props.history.push('/recipes')
+					}
 				}
 			})
 	}
@@ -69,12 +81,17 @@ class Login extends Component {
 			})
 			.then((user) => {
 				if (user && user.email) {
-					this.setState({
-						redirect: true,
-						loginOpen: true,
-						emailValue: '',
-						passwordValue:  ''
-					})
+					console.log(user)
+					if (user.metadata.a === user.metadata.b) {
+						this.props.history.push('/firstuse')
+					} else {
+						this.setState({ 
+							loginOpen: true,
+							emailValue: '',
+							passwordValue:  ''
+						})
+						this.props.history.push('/recipes')
+					}
 				}
 			}).catch((error) => {
 				this.setState({ 
@@ -111,7 +128,8 @@ class Login extends Component {
 			return <Redirect to='/recipes' />
 		}
         return (
-			<MuiThemeProvider>
+			<MuiThemeProvider muiTheme={muiTheme}>
+				<div>
 					<Snackbar
 						open={this.state.registerOpen}
 						message='New user has been made'
@@ -165,6 +183,7 @@ class Login extends Component {
 						<RaisedButton label="Log In" primary={true} style={loginInputStyle}
 							onClick={() => { this.authWithEmailPassword() }}/>
 					</Paper>
+				</div>
 			</MuiThemeProvider>
         )
     }

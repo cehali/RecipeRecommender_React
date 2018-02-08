@@ -1,6 +1,6 @@
 {
-  "short_name": "My First PWA",
-  "name": "My First Progressive Web App",
+  "short_name": "Recipe Recommender",
+  "name": "Recipe Recommender",
   "icons": [
     {
       "src":"icon.png",

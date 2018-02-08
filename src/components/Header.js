@@ -2,7 +2,15 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import AppBar from 'material-ui/AppBar'
 import { FlatButton, Drawer, MenuItem } from 'material-ui'
+import {blueGrey900} from 'material-ui/styles/colors'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import getMuiTheme from 'material-ui/styles/getMuiTheme'
+
+const muiTheme = getMuiTheme({
+    palette: {
+        primary1Color: blueGrey900,
+    }
+})
 
 class Header extends Component {
     constructor(props) {
@@ -15,7 +23,7 @@ class Header extends Component {
 
     render() {
         return (
-            <MuiThemeProvider>
+            <MuiThemeProvider muiTheme={muiTheme}>
                 <div>
                 {this.props.authenticated
                     ?<div>

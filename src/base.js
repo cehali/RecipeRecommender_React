@@ -1,12 +1,12 @@
 import firebase from 'firebase';
 
 var config = {
-    apiKey: "AIzaSyDn6_bIEBNJfJJ9Euo9jZk202MvK4QWdE8",
-    authDomain: "reciperecommender-a2348.firebaseapp.com",
-    databaseURL: "https://reciperecommender-a2348.firebaseio.com",
-    projectId: "reciperecommender-a2348",
-    storageBucket: "reciperecommender-a2348.appspot.com",
-    messagingSenderId: "260659777878"
+    apiKey: "AIzaSyDwdRXfTZw1V5MSdsyIF6ojinH7IzpLqaU",
+    authDomain: "reciperecommender-5f423.firebaseapp.com",
+    databaseURL: "https://reciperecommender-5f423.firebaseio.com",
+    projectId: "reciperecommender-5f423",
+    storageBucket: "reciperecommender-5f423.appspot.com",
+    messagingSenderId: "1027289003445"
   };
 
  const app = firebase.initializeApp(config);
