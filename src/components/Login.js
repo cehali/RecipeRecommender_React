@@ -48,12 +48,12 @@ class Login extends Component {
 					this.setState({ unableloginFbOpen: true })
 				} else {
 					if (result.user.metadata.a === result.user.metadata.b) {
-						this.props.history.push('/firstuse')
+						this.props.history.push('/firstuse', {userEmail: result.user.email})
 					} else {
 						this.setState({ 
 							loginOpen: true,
 						})
-						this.props.history.push('/recipes')
+						this.props.history.push('/recipes', {userEmail: result.user.email})
 					}
 				}
 			})
@@ -81,16 +81,15 @@ class Login extends Component {
 			})
 			.then((user) => {
 				if (user && user.email) {
-					console.log(user)
 					if (user.metadata.a === user.metadata.b) {
-						this.props.history.push('/firstuse')
+						this.props.history.push('/firstuse', {userEmail: user.email})
 					} else {
 						this.setState({ 
 							loginOpen: true,
 							emailValue: '',
 							passwordValue:  ''
 						})
-						this.props.history.push('/recipes')
+						this.props.history.push('/recipes', {userEmail: user.email})
 					}
 				}
 			}).catch((error) => {
@@ -124,9 +123,6 @@ class Login extends Component {
 	}
 
     render() {
-		if (this.state.redirect === true) {
-			return <Redirect to='/recipes' />
-		}
         return (
 			<MuiThemeProvider muiTheme={muiTheme}>
 				<div>

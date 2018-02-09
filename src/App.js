@@ -7,7 +7,7 @@ import Login from './components/Login'
 import Logout from './components/Logout'
 import FirstUse from './components/FirstUse'
 import ColdStart from './components/ColdStart'
-import Recipes  from './components/Recipes'
+import DietPlan  from './components/DietPlan'
 import Recipe  from './components/Recipe'
 import Search from './components/Search'
 import { app } from './base'
@@ -78,7 +78,7 @@ class App extends Component {
                     <Route exact path='/logout' component={Logout} />
                     <Route exact path='/firstuse' component={FirstUse} />
                     <Route exact path='/coldstart' component={ColdStart} />
-                    <Route exact path='/recipes' component={Recipes} />
+                    <Route exact path='/dietplan' component={DietPlan} />
                     <Route exact path='/search' component={Search} />
                     <Route path="/recipes/:recipeId" component={Recipe} />
                   </div>

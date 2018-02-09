@@ -45,6 +45,9 @@ class Survey extends Component {
             ratings: [],
             rateStars: [0, 0, 0, 0],
             dietType: this.props.location.state.dietType,
+            gender: this.props.location.state.gender,
+            calorieIntake: this.props.location.state.calorieIntake,
+            userEmail: this.props.location.state.userEmail,
             canSubmit: false,
             allrecipesKeys: [],
             tempKeys: []
@@ -95,10 +98,13 @@ class Survey extends Component {
             let d = new Date();
             let now = d.getTime();
             app.database().ref('users/' + now).set({
+                email: this.state.userEmail,
+                gender: this.state.gender,
                 dietType: this.state.dietType,
+                calorieIntake: this.state.calorieIntake,
                 ratings: this.state.ratings
             })
-            this.props.history.push('/end')
+            this.props.history.push('/dietplan', {userEmail: this.state.userEmail})
         }
     }
 

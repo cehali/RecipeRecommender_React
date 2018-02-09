@@ -17,9 +17,6 @@ class Header extends Component {
         super(props);
         this.state = {open: false};
     }
-    
-    handleToggle = () => {this.state.open === true ? this.setState({open: false}): this.setState({open: true})};
-
 
     render() {
         return (
@@ -35,8 +32,6 @@ class Header extends Component {
                     <Drawer open={this.state.open}
                         docked={false}
                         onRequestChange={(open) => this.setState({open})}>
-                        <MenuItem containerElement={<Link to='/search' />} onClick={this.handleToggle}>Search Recipe</MenuItem>
-                        <MenuItem containerElement={<Link to='/coldstart' />} onClick={this.handleToggle}>Cold Start</MenuItem>
                     </Drawer>
                     </div>
                     :<div>

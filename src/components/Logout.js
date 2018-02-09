@@ -31,16 +31,16 @@ class Logout extends Component {
 		}
 		return (
 			<MuiThemeProvider>
-				<div style={{ textAlign: 'center', position: 'absolute', top: '25%', left: '50%'}}>
-					<h3>Logging Out</h3>
-					<RefreshIndicator
-						size={50}
-						status="loading"
-						style={style.refresh}
-						left={0}
-						top={0}
-					/>
-				</div>
+				<div style={{ position: 'relative' }}>
+				<RefreshIndicator
+					size={50}
+					status="loading"
+					top={30}
+					left={-25}
+					status={'loading'}
+					style={{marginLeft: '50%'}}
+				/>
+			</div>
 			</MuiThemeProvider>
 		)       
     }

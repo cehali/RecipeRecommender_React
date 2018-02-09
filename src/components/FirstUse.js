@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import {Paper, SelectField, MenuItem, TextField, FloatingActionButton, RaisedButton, Snackbar } from 'material-ui'
-import { app } from '../base'
 import {blueGrey900} from 'material-ui/styles/colors'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
@@ -28,8 +27,9 @@ class FirstUse extends Component {
 		this.state = {
 			valueGender: null,
 			valueDietType: null,
-			valueCalories: 0,
-			alertOpen: false
+			valueCalorie: 0,
+			alertOpen: false,
+			userEmail: this.props.location.state.userEmail
 		}
 		this.handleChangeGender = this.handleChangeGender.bind(this)
 		this.handleChangeDietType = this.handleChangeDietType.bind(this)
@@ -49,7 +49,8 @@ class FirstUse extends Component {
 		if (this.state.valueCalorie < 1000) {
 			this.setState({alertOpen: true})
 		} else {
-			this.props.history.push('/coldstart')
+			this.props.history.push('/coldstart', {userEmail: this.state.userEmail, dietType: this.state.valueDietType, 
+				gender: this.state.valueGender, calorieIntake: this.state.valueCalorie})
 		}
 	}
 
@@ -58,47 +59,49 @@ class FirstUse extends Component {
 	render() {
 		return (
 			<MuiThemeProvider muiTheme={muiTheme}>
-				<Snackbar
-					open={this.state.alertOpen}
-					message='Calorie intake value has to be bigger than 1000'
-					autoHideDuration={4000}
-					onRequestClose={this.handleRequestClose}
-				/>
-				<Paper style={loginStyle} zDepth={2}>
-				<h3>Please provide information presented below</h3>
-					<SelectField
-							floatingLabelText='Gender?'
-							value={this.state.valueGender}
-							onChange={this.handleChangeGender}
-							autoWidth={true}
-							style = {InputStyle}
-							>
-							<MenuItem value='Woman' primaryText='Woman' />
-							<MenuItem value='Man' primaryText='Man' />
-					</SelectField>
-					<SelectField
-							floatingLabelText='Diet Type?'
-							value={this.state.valueDietType}
-							onChange={this.handleChangeDietType}
-							autoWidth={true}
-							style = {InputStyle}
-							>
-							<MenuItem value='Without Meat' primaryText='Without Meat' />
-							<MenuItem value='Without Fishes' primaryText='Without Fishes' />
-							<MenuItem value='Without Diary' primaryText='Without Diary' />
-							<MenuItem value='Vegetarian (without meat and fishes)' primaryText='Vegetarian (without meat and fishes)' />
-							<MenuItem value='Vegan (without meat, fishes and diary)' primaryText='Vegan (without meat, fishes and diary)' />
-							<MenuItem value='I eat everything' primaryText='I eat everything' />
-					</SelectField>
-					<TextField
-						floatingLabelText='Planned daily calorie intake'
-						type='number'
-						style = {InputStyle}
-						onChange = {this.handleChangeCalorie}
+				<div>
+					<Snackbar
+						open={this.state.alertOpen}
+						message='Calorie intake value has to be bigger than 1000'
+						autoHideDuration={4000}
+						onRequestClose={this.handleRequestClose}
 					/>
-    				{this.state.canSubmit ? <RaisedButton label='SUBMIT' primary={true} onClick={this.submit} style={InputStyle} disabled={false}/> 
-                    : <RaisedButton label='SUBMIT' primary={true} onClick={this.submit} style={InputStyle} disabled={true}/>}						
-				</Paper>
+					<Paper style={loginStyle} zDepth={2}>
+					<h3>Please provide information presented below</h3>
+						<SelectField
+								floatingLabelText='Gender?'
+								value={this.state.valueGender}
+								onChange={this.handleChangeGender}
+								autoWidth={true}
+								style = {InputStyle}
+								>
+								<MenuItem value='Woman' primaryText='Woman' />
+								<MenuItem value='Man' primaryText='Man' />
+						</SelectField>
+						<SelectField
+								floatingLabelText='Diet Type?'
+								value={this.state.valueDietType}
+								onChange={this.handleChangeDietType}
+								autoWidth={true}
+								style = {InputStyle}
+								>
+								<MenuItem value='withoutMeat' primaryText='Without Meat' />
+								<MenuItem value='withoutFish' primaryText='Without Fishes' />
+								<MenuItem value='withoutDiary' primaryText='Without Diary' />
+								<MenuItem value='vegetarian' primaryText='Vegetarian (without meat and fishes)' />
+								<MenuItem value='vegan' primaryText='Vegan (without meat, fishes and diary)' />
+								<MenuItem value='everything' primaryText='I eat everything' />
+						</SelectField>
+						<TextField
+							floatingLabelText='Planned daily calorie intake'
+							type='number'
+							style = {InputStyle}
+							onChange = {this.handleChangeCalorie}
+						/>
+						{this.state.canSubmit ? <RaisedButton label='SUBMIT' primary={true} onClick={this.submit} style={InputStyle} disabled={false}/> 
+						: <RaisedButton label='SUBMIT' primary={true} onClick={this.submit} style={InputStyle} disabled={true}/>}						
+					</Paper>
+				</div>	
 			</MuiThemeProvider>
 		)
 	}

@@ -1,10 +1,10 @@
 import React, { Component, Image } from 'react'
 import { List, ListItem, nestedItems, RefreshIndicator, Table, TableBody, TableRow, TableRowColumn, RaisedButton, FlatButton, Dialog } from 'material-ui'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
-import { app } from '../base'
 import FullscreenDialog from 'material-ui-fullscreen-dialog'
 import { Link } from 'react-router-dom'
 
+const API = 'https://reciperecommender-survey.ml:3000/'
 
 class Recipe extends Component {
     constructor(props) {
@@ -17,44 +17,40 @@ class Recipe extends Component {
 	}
 
     getItems = () => {
-		var recipeReceived = {}
+		let recipeReceived = {}
 		let recipeId = this.props.match.params.recipeId
-        let ref = app.database().ref();
-        ref.once('value', function(snapshot) {
-        	snapshot.forEach(function(child) {
-				if (child.key == recipeId) {
-					recipeReceived = {
-						name: child.val().name,
-						photo: child.val().images[0].imageUrlsBySize[360],
-						ingredients: child.val().ingredientLines,
-						source: child.val().source.sourceRecipeUrl,
-						nutritions: child.val().nutritionEstimates,
-						rating: child.val().rating,
-						totalTime: child.val().totalTime,
-						nrservings: child.val().numberOfServings,
-						calories: child.val().nutritionEstimates.find(obj => obj.attribute === 'ENERC_KCAL'),
-						fatKcal: child.val().nutritionEstimates.find(obj => obj.attribute === 'FAT_KCAL'),
-						totalFat: child.val().nutritionEstimates.find(obj => obj.attribute === 'FAT'),
-						satFat: child.val().nutritionEstimates.find(obj => obj.attribute === 'FASAT'),
-						puFat: child.val().nutritionEstimates.find(obj => obj.attribute === 'FAPU'),
-						muFat: child.val().nutritionEstimates.find(obj => obj.attribute === 'FAMS'),
-						protein: child.val().nutritionEstimates.find(obj => obj.attribute === 'PROCNT'),
-						totalCarb: child.val().nutritionEstimates.find(obj => obj.attribute === 'CHOCDF'),
-						dieteryFiber: child.val().nutritionEstimates.find(obj => obj.attribute === 'FIBTG'),
-						sugar: child.val().nutritionEstimates.find(obj => obj.attribute === 'SUGAR'),
-						cholesterol: child.val().nutritionEstimates.find(obj => obj.attribute === 'CHOLE'),
-						potassium: child.val().nutritionEstimates.find(obj => obj.attribute === 'K'),
-						vitA: child.val().nutritionEstimates.find(obj => obj.attribute === 'VITA_RAE'),
-						vitC: child.val().nutritionEstimates.find(obj => obj.attribute === 'VITC'),
-						calcium: child.val().nutritionEstimates.find(obj => obj.attribute === 'CA'),
-						iron: child.val().nutritionEstimates.find(obj => obj.attribute === 'FE'),
-
-						_key: child.key
-					};
-				}
-          	});
-        }).catch((error) => {
-            console.log("The read failed: " + error.message);
+        fetch(API + recipeId)
+        .then(response => response.json())
+        .then(data => {
+			recipeReceived = {
+				name: data.val().name,
+				photo: data.val().images[0].imageUrlsBySize[360],
+				ingredients: data.val().ingredientLines,
+				source: data.val().source.sourceRecipeUrl,
+				nutritions: data.val().nutritionEstimates,
+				rating: data.val().rating,
+				totalTime: data.val().totalTime,
+				nrservings: data.val().numberOfServings,
+				calories: data.val().nutritionEstimates.find(obj => obj.attribute === 'ENERC_KCAL'),
+				fatKcal: data.val().nutritionEstimates.find(obj => obj.attribute === 'FAT_KCAL'),
+				totalFat: data.val().nutritionEstimates.find(obj => obj.attribute === 'FAT'),
+				satFat: data.val().nutritionEstimates.find(obj => obj.attribute === 'FASAT'),
+				puFat: data.val().nutritionEstimates.find(obj => obj.attribute === 'FAPU'),
+				muFat: data.val().nutritionEstimates.find(obj => obj.attribute === 'FAMS'),
+				protein: data.val().nutritionEstimates.find(obj => obj.attribute === 'PROCNT'),
+				totalCarb: data.val().nutritionEstimates.find(obj => obj.attribute === 'CHOCDF'),
+				dieteryFiber: data.val().nutritionEstimates.find(obj => obj.attribute === 'FIBTG'),
+				sugar: data.val().nutritionEstimates.find(obj => obj.attribute === 'SUGAR'),
+				cholesterol: data.val().nutritionEstimates.find(obj => obj.attribute === 'CHOLE'),
+				potassium: data.val().nutritionEstimates.find(obj => obj.attribute === 'K'),
+				vitA: data.val().nutritionEstimates.find(obj => obj.attribute === 'VITA_RAE'),
+				vitC: data.val().nutritionEstimates.find(obj => obj.attribute === 'VITC'),
+				calcium: data.val().nutritionEstimates.find(obj => obj.attribute === 'CA'),
+				iron: data.val().nutritionEstimates.find(obj => obj.attribute === 'FE'),
+				_key: data.key
+			}
+		}) .catch((error) => {
+			console.log("The read failed: " + error.message)
         }).then(() => {
 			this.setState({
 				recipe: recipeReceived,
@@ -80,14 +76,14 @@ class Recipe extends Component {
 		if (this.state.loading == true) {
 			return (
 				<MuiThemeProvider>
-					<div style={{ textAlign: 'center', position: 'absolute', top: '25%', left: '50%'}}>
-						<h3>Loading</h3>
+					<div style={{ position: 'relative' }}>
 						<RefreshIndicator
 							size={50}
 							status="loading"
-							left={0}
-							top={0}
-							style={{display: 'inline-block', position: 'relative'}}
+							top={30}
+							left={-25}
+							status={'loading'}
+							style={{marginLeft: '50%'}}
 						/>
 					</div>
 				</MuiThemeProvider>
