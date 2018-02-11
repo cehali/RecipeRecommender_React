@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { Redirect } from 'react-router-dom'
 import { app, facebookProvider } from '../base'
 import { Snackbar, RaisedButton, Divider, TextField, Paper } from 'material-ui'
 import {blueGrey900} from 'material-ui/styles/colors'
@@ -89,7 +88,7 @@ class Login extends Component {
 							emailValue: '',
 							passwordValue:  ''
 						})
-						this.props.history.push('/recipes', {userEmail: user.email})
+						this.props.history.push('/dietplan', {userEmail: user.email})
 					}
 				}
 			}).catch((error) => {

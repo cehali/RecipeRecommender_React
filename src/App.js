@@ -57,7 +57,7 @@ class App extends Component {
             <h3>Loading</h3>
             <RefreshIndicator
               size={50}
-              status="loading"
+              status={'loading'}
               style={style.refresh}
               left={0}
               top={0}

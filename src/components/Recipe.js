@@ -1,7 +1,6 @@
-import React, { Component, Image } from 'react'
-import { List, ListItem, nestedItems, RefreshIndicator, Table, TableBody, TableRow, TableRowColumn, RaisedButton, FlatButton, Dialog } from 'material-ui'
+import React, { Component } from 'react'
+import { List, ListItem, RefreshIndicator, Table, TableBody, TableRow, TableRowColumn, RaisedButton } from 'material-ui'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
-import FullscreenDialog from 'material-ui-fullscreen-dialog'
 import { Link } from 'react-router-dom'
 
 const API = 'https://reciperecommender-survey.ml:3000/'
@@ -49,7 +48,7 @@ class Recipe extends Component {
 				iron: data.val().nutritionEstimates.find(obj => obj.attribute === 'FE'),
 				_key: data.key
 			}
-		}) .catch((error) => {
+		}).catch((error) => {
 			console.log("The read failed: " + error.message)
         }).then(() => {
 			this.setState({
@@ -73,13 +72,12 @@ class Recipe extends Component {
   
 
     render() {
-		if (this.state.loading == true) {
+		if (this.state.loading === true) {
 			return (
 				<MuiThemeProvider>
 					<div style={{ position: 'relative' }}>
 						<RefreshIndicator
 							size={50}
-							status="loading"
 							top={30}
 							left={-25}
 							status={'loading'}

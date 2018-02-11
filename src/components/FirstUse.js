@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {Paper, SelectField, MenuItem, TextField, FloatingActionButton, RaisedButton, Snackbar } from 'material-ui'
+import {Paper, SelectField, MenuItem, TextField, RaisedButton, Snackbar } from 'material-ui'
 import {blueGrey900} from 'material-ui/styles/colors'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'

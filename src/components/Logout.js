@@ -4,14 +4,6 @@ import { app } from '../base';
 import RefreshIndicator from 'material-ui/RefreshIndicator'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 
-
-const style = {
-	refresh: {
-	  display: 'inline-block',
-	  position: 'relative',
-	}
-}
-
 class Logout extends Component {
 	constructor() {
 		super()
@@ -34,10 +26,9 @@ class Logout extends Component {
 				<div style={{ position: 'relative' }}>
 				<RefreshIndicator
 					size={50}
-					status="loading"
+					status={'loading'}
 					top={30}
 					left={-25}
-					status={'loading'}
 					style={{marginLeft: '50%'}}
 				/>
 			</div>

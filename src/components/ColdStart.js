@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { AppBar, Card, CardTitle, CardMedia, CardActions, RefreshIndicator, RaisedButton } from 'material-ui'
 import StarRatingComponent from 'react-star-rating-component'
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import { app } from '../base'
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import {blueGrey900} from 'material-ui/styles/colors'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 
@@ -11,10 +11,6 @@ const muiTheme = getMuiTheme({
         primary1Color: blueGrey900,
     }
 })
-
-const buttonStyle = {
-    width: '100%'
-}
 
 const dishTypesStages = ['Breakfast and Brunch', 'Appetizers/Lunch and Snacks', 'Soups', 'Main Dishes', 'Side Dishes/Salads', 'Desserts/Afternoon Tea']
 const titles = ['Breakfast', 'Appetizers', 'Soups', 'Main Dishes', 'Side Dishes', 'Desserts']
@@ -95,9 +91,7 @@ class Survey extends Component {
                 this.getItems(this.state.nrStage)
             })
         } else {
-            let d = new Date();
-            let now = d.getTime();
-            app.database().ref('users/' + now).set({
+            app.database().ref('users').push({
                 email: this.state.userEmail,
                 gender: this.state.gender,
                 dietType: this.state.dietType,
@@ -132,7 +126,6 @@ class Survey extends Component {
 				<div style={{ position: 'relative' }}>
 					<RefreshIndicator
 						size={50}
-						status="loading"
                         top={30}
                         left={-25}
                         status={'loading'}
@@ -168,8 +161,8 @@ class Survey extends Component {
                             </div>
                         </CardActions>
                     </Card>
-                    ))}{this.state.canSubmit ? <RaisedButton label='NEXT' primary={true} onClick={this.goToNextStage} style={buttonStyle} disabled={false}/> 
-                    : <RaisedButton label='NEXT' primary={true} onClick={this.goToNextStage} style={buttonStyle} disabled={true}/>}
+                    ))}{this.state.canSubmit ? <RaisedButton label='NEXT' primary={true} onClick={this.goToNextStage} fullWidth={true} disabled={false}/> 
+                    : <RaisedButton label='NEXT' primary={true} onClick={this.goToNextStage} fullWidth={true} disabled={true}/>}
                     </div>
                 </MuiThemeProvider>
             )
