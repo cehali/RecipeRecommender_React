@@ -12,6 +12,14 @@ import Recipe  from './components/Recipe'
 import Search from './components/Search'
 import { app } from './base'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import {blueGrey900} from 'material-ui/styles/colors'
+import getMuiTheme from 'material-ui/styles/getMuiTheme'
+
+const muiTheme = getMuiTheme({
+    palette: {
+        primary1Color: blueGrey900,
+    }
+});
 
 const style = {
 	refresh: {
@@ -52,7 +60,7 @@ class App extends Component {
   render() {
     if (this.state.loading === true) {
       return (
-        <MuiThemeProvider>
+        <MuiThemeProvider muiTheme={muiTheme}>
           <div style={{ textAlign: 'center', position: 'absolute', top: '25%', left: '50%'}}>
             <h3>Loading</h3>
             <RefreshIndicator

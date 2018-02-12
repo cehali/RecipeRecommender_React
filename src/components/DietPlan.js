@@ -3,7 +3,7 @@ import { AppBar, Card, CardTitle, CardMedia, CardActions, RefreshIndicator, Rais
 import ContentAdd from 'material-ui/svg-icons/content/add'
 import { app } from '../base'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
-import {blueGrey900} from 'material-ui/styles/colors'
+import {blueGrey900, green500} from 'material-ui/styles/colors'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 
 const muiTheme = getMuiTheme({
@@ -30,19 +30,23 @@ class DietPlan extends Component {
             gender: null,
             dietType: null,
             calorieIntake: 0,
-            breakfast: [],
-            lunch: [],
+            breakfasts: [],
+            lunches: [],
             soups: [],
             mainDishes: [],
             desserts: [], 
             currentCalorie: 0,
-            breakfastChosen: null,
-            lunchChosen: null,
-            soupChosen: null,
-            maindishChosen: null,
-            dessertChosen: null,
+            breakfastChosen: [],
+            lunchChosen: [],
+            soupChosen: [],
+            maindishChosen: [],
+            dessertChosen: [],
             submit: false,
-            chosen: false
+            chosenBr: [false, false, false, false],
+            chosenLu: [0, 0, 0, 0],
+            chosenSou: [0, 0, 0, 0],
+            chosenMa: [0, 0, 0, 0],
+            chosenDe: [0, 0, 0, 0]
         }
         this.getUser = this.getUser.bind(this)
         this.getDietPlan = this.getDietPlan.bind(this)
@@ -79,30 +83,49 @@ class DietPlan extends Component {
         fetch(API + email)
         .then(response => response.json())
         .then(data => {
+            console.log(data)
             this.setState({
-                breakfast: data.slice(0, 4),
-                lunch: data.slice(4, 8),
-                soups: data.slice(8, 12),
-                mainDishes: data.slice(12, 16),
-                desserts: data.slice(16, 20),
+                breakfasts: data[0],
+                lunches: data[1],
+                soups: data[2],
+                mainDishes: data[3],
+                desserts: data[4],
                 loading: false,
                 generated: true
             })
         })
     }
 
-    addBreakfast = (itemKey, itemCalorie) => {
-        this.setState(({itemCalorie}) => ({
-            chosen: true,
-            currentCalorie: this.state.currentCalorie + itemCalorie,
-            breakfastChosen: itemKey
+    addBreakfast = (idx, itemKey, itemCalorie) => {
+        console.log(this.state.chosenBr)
+        let added = []
+        added = this.state.chosenBr
+        added[idx] = !(this.state.chosenBr[idx])
+        if (added[idx] === true) {
+            let breakfastChosenTemp = this.state.breakfastChosen.slice()
+            breakfastChosenTemp.push(itemKey)
+            this.setState({
+                chosenBr: added,
+                currentCalorie: this.state.currentCalorie + itemCalorie,
+                breakfastChosen: breakfastChosenTemp
             })
-        )
+        } else {
+            let breakfastChosenTemp = this.state.breakfastChosen.slice()
+            let i = breakfastChosenTemp.indexOf(itemKey);
+            if(i !== -1) {
+                breakfastChosenTemp.splice(i, 1);
+            }
+            this.setState({
+                chosenBr: added,
+                currentCalorie: this.state.currentCalorie - itemCalorie,
+                breakfastChosen: breakfastChosenTemp
+            })
+        }
     }
 
     addLunch = (itemKey, itemCalorie) => {
         this.setState(({itemCalorie}) => ({
-            chosen: true,
+            chosenLu: !this.state.chosenLu,
             currentCalorie: this.state.currentCalorie + itemCalorie,
             lunchChosen: itemKey
             })
@@ -111,7 +134,7 @@ class DietPlan extends Component {
 
     addSoup = (itemKey, itemCalorie) => {
         this.setState(({itemCalorie}) => ({
-            chosen: true,
+            chosenSou: !this.state.chosenSou,
             currentCalorie: this.state.currentCalorie + itemCalorie,
             soupChosen: itemKey
             })
@@ -120,6 +143,7 @@ class DietPlan extends Component {
 
     addMainDish = (itemKey, itemCalorie) => {
         this.setState(({itemCalorie}) => ({
+            chosenMa: !this.state.chosenMa,
             currentCalorie: this.state.currentCalorie + itemCalorie,
             maindishChosen: itemKey
             })
@@ -128,7 +152,7 @@ class DietPlan extends Component {
 
     addDessert = (itemKey, itemCalorie) => {
         this.setState(({itemCalorie}) => ({
-            chosen: true,
+            chosenDe: !this.state.chosenDe,
             currentCalorie: this.state.currentCalorie + itemCalorie,
             dessertChosen: itemKey
             })
@@ -136,14 +160,15 @@ class DietPlan extends Component {
     }
 
     submit = () => {
-        app.database().ref('users').orderByChild('email').equalTo(this.state.userEmail).push({
+        /*app.database().ref('users').orderByChild('email').equalTo(this.state.userEmail).push({
             breakfast: this.state.breakfastChosen,
             lunch: this.state.lunchChosen,
             soup: this.state.soupChosen,
             maindish: this.state.maindishChosen,
-            desesrt: this.state.dessertChosen
+            dessert: this.state.dessertChosen
         })
-        this.props.history.push('/dietplan', {userEmail: this.state.userEmail})
+        this.props.history.push('/dietplan', {userEmail: this.state.userEmail})*/
+        console.log('hura')
     }
     
     render() {
@@ -177,12 +202,14 @@ class DietPlan extends Component {
                                 showMenuIconButton={false}
                                 style={{textAlign: 'center'}}
                             />
+                            <div style={{position: 'sticky'}}>
                             <AppBar
-                                title={`Daily calorie intake: ${this.state.calorieIntake} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp Calorie from chosen food: ${this.state.currentCalorie}`}
+                                title={`Daily calorie intake: ${this.state.calorieIntake} Calorie from chosen food: ${this.state.currentCalorie}`}
                                 showMenuIconButton={false}
                                 style={{textAlign: 'center'}}
                             />
-                            {this.state.Breakfast.map((tile, index) => (
+                            </div>
+                            {this.state.breakfasts.map((tile, index) => (
                             <Card style={{width:'50%', display: 'inline-block', padding: '10px'}}>
                                 <CardMedia
                                     overlay={<CardTitle title={tile.name}/>}
@@ -191,18 +218,19 @@ class DietPlan extends Component {
                                 </CardMedia>
                                 <CardActions>
                                     <div style={{fontSize: '30px', textAlign: 'center'}}>
-                                        Calories: {tile.nutritionEstimates.find(obj => obj.attribute === 'ENERC_KCAL')}
+                                        Calories: {parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'ENERC_KCAL').value, 10)}
                                     </div>
-                                    {this.state.chosen ?
-                                    <FloatingActionButton style={{marginRight: '20'}} onClick={() => {this.addBreakfast(tile._key, tile.nutritionEstimates.find(obj => obj.attribute === 'ENERC_KCAL'))}}>
+                                    {this.state.chosenBr[index] ?
+                                    <FloatingActionButton backgroundColor={green500} onClick={() => {this.addBreakfast(index, tile.key, parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'ENERC_KCAL').value, 10))}}>
                                         <ContentAdd />
                                     </FloatingActionButton>
-                                    :<FloatingActionButton style={{marginRight: '20', backgroundColor: '#3ccc3e'}} onClick={() => {this.addBreakfast(tile._key, tile.nutritionEstimates.find(obj => obj.attribute === 'ENERC_KCAL'))}}>
+                                    :<FloatingActionButton onClick={() => {this.addBreakfast(index, tile.key, parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'ENERC_KCAL').value, 10))}}>
                                         <ContentAdd />
                                     </FloatingActionButton>}
                                 </CardActions>
                             </Card>
-                            ))}{this.state.submit ? <RaisedButton label='SUBMIT' primary={true} onClick={this.submit} fullWidth={true} disabled={false}/> 
+                            ))}{this.state.breakfastChosen.length > 0
+                            ? <RaisedButton label='SUBMIT' primary={true} onClick={this.submit} fullWidth={true} disabled={false}/> 
                             : <RaisedButton label='SUBMIT' primary={true} onClick={this.submit} fullWidth={true} disabled={true}/>}
                         </div>
                     </ MuiThemeProvider>
