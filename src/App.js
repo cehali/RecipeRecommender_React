@@ -61,15 +61,14 @@ class App extends Component {
     if (this.state.loading === true) {
       return (
         <MuiThemeProvider muiTheme={muiTheme}>
-          <div style={{ textAlign: 'center', position: 'absolute', top: '25%', left: '50%'}}>
-            <h3>Loading</h3>
+          <div style={{ position: 'relative' }}>
             <RefreshIndicator
-              size={50}
+						  size={50}
+              top={100}
+              left={-25}
               status={'loading'}
-              style={style.refresh}
-              left={0}
-              top={0}
-            />        
+              style={{marginLeft: '50%'}}
+					/>      
           </div>
         </MuiThemeProvider>
       )

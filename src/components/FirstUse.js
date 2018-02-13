@@ -87,7 +87,7 @@ class FirstUse extends Component {
 								>
 								<MenuItem value='withoutMeat' primaryText='Without Meat' />
 								<MenuItem value='withoutFish' primaryText='Without Fishes' />
-								<MenuItem value='withoutDiary' primaryText='Without Diary' />
+								<MenuItem value='withoutDiary' primaryText='Without Dairy' />
 								<MenuItem value='vegetarian' primaryText='Vegetarian (without meat and fishes)' />
 								<MenuItem value='vegan' primaryText='Vegan (without meat, fishes and diary)' />
 								<MenuItem value='everything' primaryText='I eat everything' />

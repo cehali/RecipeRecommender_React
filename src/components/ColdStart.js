@@ -131,7 +131,7 @@ class Survey extends Component {
 				<div style={{ position: 'relative' }}>
 					<RefreshIndicator
 						size={50}
-                        top={30}
+                        top={100}
                         left={-25}
                         status={'loading'}
                         style={{marginLeft: '50%'}}

@@ -27,7 +27,7 @@ class Logout extends Component {
 				<RefreshIndicator
 					size={50}
 					status={'loading'}
-					top={30}
+					top={100}
 					left={-25}
 					style={{marginLeft: '50%'}}
 				/>
