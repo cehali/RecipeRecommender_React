@@ -56,9 +56,9 @@ class DietPlan extends Component {
         this.state = {
             generated: false,
             loading: false,
-            userEmail: this.props.location.state.userEmail,
             gender: null,
             dietType: null,
+            userEmail: this.props.location.state.userEmail,
             calorieIntake: 0,
             breakfasts: [],
             lunches: [],
@@ -79,7 +79,8 @@ class DietPlan extends Component {
             chosenLu: [false, false, false, false],
             chosenSou: [false, false, false, false],
             chosenMa: [false, false, false, false],
-            chosenDe: [false, false, false, false]
+            chosenDe: [false, false, false, false],
+            _id: null
         }
         this.getUser = this.getUser.bind(this)
         this.getDietPlan = this.getDietPlan.bind(this)
@@ -92,19 +93,22 @@ class DietPlan extends Component {
 
     getUser = () => {
         let userReceived = {}
+        let _id
         let email = this.state.userEmail
         let query = app.database().ref('users').orderByChild('email').equalTo(email)
         query.once('value', function(snapshot) {
             snapshot.forEach(function(child) {
-                userReceived['gen'] = child.val().gender,
-                userReceived['diet'] = child.val().dietType,
+                userReceived['gen'] = child.val().gender
+                userReceived['diet'] = child.val().dietType
                 userReceived['calorie'] = child.val().calorieIntake
+                _id = child.key
             });
         }).then(() => {
             this.setState({
                 gender: userReceived.gen,
                 dietType: userReceived.diet,
                 calorieIntake: userReceived.calorie,
+                _id: _id,
                 loading: true
             })
             this.getDietPlan(this.state.userEmail)
@@ -112,11 +116,9 @@ class DietPlan extends Component {
     }
 
     getDietPlan = (email) => {
-        let recipesReceived = {}
         fetch(API + email)
         .then(response => response.json())
         .then(data => {
-            console.log(data)
             this.setState({
                 breakfasts: data[0],
                 lunches: data[1],
@@ -185,7 +187,6 @@ class DietPlan extends Component {
             this.setState({
                 chosenLu: added,
                 currentCalorie: this.state.currentCalorie - itemCalorie,
-                currentCalorie: this.state.currentCalorie - itemCalorie,
                 currentFat: this.state.currentFat - itemFat,
                 currentProtein: this.state.currentProtein - itemProtein,
                 currentCarbs: this.state.currentCarbs - itemCarbs,
@@ -217,7 +218,6 @@ class DietPlan extends Component {
             }
             this.setState({
                 chosenSou: added,
-                currentCalorie: this.state.currentCalorie - itemCalorie,
                 currentCalorie: this.state.currentCalorie - itemCalorie,
                 currentFat: this.state.currentFat - itemFat,
                 currentProtein: this.state.currentProtein - itemProtein,
@@ -251,7 +251,6 @@ class DietPlan extends Component {
             this.setState({
                 chosenMa: added,
                 currentCalorie: this.state.currentCalorie - itemCalorie,
-                currentCalorie: this.state.currentCalorie - itemCalorie,
                 currentFat: this.state.currentFat - itemFat,
                 currentProtein: this.state.currentProtein - itemProtein,
                 currentCarbs: this.state.currentCarbs - itemCarbs,
@@ -284,7 +283,6 @@ class DietPlan extends Component {
             this.setState({
                 chosenDe: added,
                 currentCalorie: this.state.currentCalorie - itemCalorie,
-                currentCalorie: this.state.currentCalorie - itemCalorie,
                 currentFat: this.state.currentFat - itemFat,
                 currentProtein: this.state.currentProtein - itemProtein,
                 currentCarbs: this.state.currentCarbs - itemCarbs,
@@ -294,15 +292,18 @@ class DietPlan extends Component {
     }
 
     submit = () => {
-        /*app.database().ref('users').orderByChild('email').equalTo(this.state.userEmail).push({
+        app.database().ref(`users/${this.state._id}/dietPlan`).push({
             breakfast: this.state.breakfastChosen,
             lunch: this.state.lunchChosen,
             soup: this.state.soupChosen,
-            maindish: this.state.maindishChosen,
-            dessert: this.state.dessertChosen
+            mainDish: this.state.mainDishChosen,
+            dessert: this.state.dessertChosen,
+            calorie: this.state.currentCalorie,
+            fat: this.state.currentFat,
+            protein: this.state.currentProtein,
+            carbs: this.state.currentCarbs
         })
-        this.props.history.push('/dietplan', {userEmail: this.state.userEmail})*/
-        console.log('hura')
+        this.props.history.push('/userprofile', {_id: this.state._id})
     }
     
     render() {

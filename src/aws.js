@@ -64,16 +64,27 @@ const sslOptions = {
 
 MongoClient.connect(url, cors(), function(err, db) {
         if (err) throw err;
-        app.get('/:recipeId', (req, res) =>  {
+        app.get('/short/:recipeId', (req, res) =>  {
             const dbo = db.db('RecipeRecommender')
             const recipeId = req.params.recipeId;
-            dbo.collection('recipes').find({key: recipeId}).toArray(function(error, documents)  {
+            dbo.collection('recipes').find({key: recipeId}, {fields: {'name': 1, 'images.imageUrlsBySize.360': 1, 'key': 1 }}).toArray(function(error, documents)  {
                     if (err) {
                             res.send({'error':'An error has occurred'});
                     } else {
                             res.send(documents);
                     }
             });
+        });
+        app.get('/:recipeId', (req, res) =>  {
+                const dbo = db.db('RecipeRecommender')
+                const recipeId = req.params.recipeId;
+                dbo.collection('recipes').find({key: recipeId}, {fields: {'name': 1, 'images.imageUrlsBySize.360': 1, 'nutritionEstimates': 1, 'key': 1 }}).toArray(function(error, documents)  {
+                        if (err) {
+                                res.send({'error':'An error has occurred'});
+                        } else {
+                                res.send(documents);
+                        }
+                });
         });
         app.get('/:dietType/:course', (req, res) =>  {
                 const dbo = db.db('RecipeRecommender')

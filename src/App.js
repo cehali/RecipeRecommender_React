@@ -2,13 +2,13 @@ import React, { Component } from 'react'
 import { BrowserRouter, Route } from 'react-router-dom'
 import RefreshIndicator from 'material-ui/RefreshIndicator'
 import Header  from './components/Header'
-import Footer  from './components/Footer'
 import Login from './components/Login'
 import Logout from './components/Logout'
 import FirstUse from './components/FirstUse'
 import ColdStart from './components/ColdStart'
 import DietPlan  from './components/DietPlan'
 import Recipe  from './components/Recipe'
+import UserProfile from './components/UserProfile'
 import Search from './components/Search'
 import { app } from './base'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
@@ -20,13 +20,6 @@ const muiTheme = getMuiTheme({
         primary1Color: blueGrey900,
     }
 });
-
-const style = {
-	refresh: {
-	  display: 'inline-block',
-	  position: 'relative',
-	},
-};
 
 class App extends Component {
   constructor() {
@@ -80,15 +73,14 @@ class App extends Component {
             <div className='header'>
               <Header authenticated={this.state.authenticated}/>
                 <div className='main-content' style={{padding: '1em'}}>
-                  <div className='workspace'>
-                    <Route exact path='/login' component={Login} />
-                    <Route exact path='/logout' component={Logout} />
-                    <Route exact path='/firstuse' component={FirstUse} />
-                    <Route exact path='/coldstart' component={ColdStart} />
-                    <Route exact path='/dietplan' component={DietPlan} />
-                    <Route exact path='/search' component={Search} />
-                    <Route path="/recipes/:recipeId" component={Recipe} />
-                  </div>
+                  <Route exact path='/login' component={Login} />
+                  <Route exact path='/logout' component={Logout} />
+                  <Route exact path='/firstuse' component={FirstUse} />
+                  <Route exact path='/coldstart' component={ColdStart} />
+                  <Route exact path='/dietplan' component={DietPlan} />
+                  <Route exact path='/userprofile' component={UserProfile} />
+                  <Route exact path='/search' component={Search} />
+                  <Route path='/recipe/:recipeId' component={Recipe} />
                 </div>
               </div>
             </BrowserRouter>
@@ -101,10 +93,8 @@ class App extends Component {
             <div className='header'>
               <Header authenticated={this.state.authenticated}/>
                 <div className='main-content' style={{padding: '1em'}}>
-                  <div className='workspace'>
-                    <Route exact path='/login' component={Login} />
-                    <Route exact path='/logout' component={Logout} />
-                  </div>
+                  <Route exact path='/login' component={Login} />
+                  <Route exact path='/logout' component={Logout} />
                 </div>
               </div>
             </BrowserRouter>

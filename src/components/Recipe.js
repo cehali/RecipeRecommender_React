@@ -1,7 +1,15 @@
 import React, { Component } from 'react'
 import { List, ListItem, RefreshIndicator, Table, TableBody, TableRow, TableRowColumn, RaisedButton } from 'material-ui'
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import { Link } from 'react-router-dom'
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import {blueGrey900} from 'material-ui/styles/colors'
+import getMuiTheme from 'material-ui/styles/getMuiTheme'
+
+const muiTheme = getMuiTheme({
+    palette: {
+        primary1Color: blueGrey900
+    }
+});
 
 const API = 'https://reciperecommender-survey.ml:3000/'
 
@@ -22,35 +30,36 @@ class Recipe extends Component {
         .then(response => response.json())
         .then(data => {
 			recipeReceived = {
-				name: data.val().name,
-				photo: data.val().images[0].imageUrlsBySize[360],
-				ingredients: data.val().ingredientLines,
-				source: data.val().source.sourceRecipeUrl,
-				nutritions: data.val().nutritionEstimates,
-				rating: data.val().rating,
-				totalTime: data.val().totalTime,
-				nrservings: data.val().numberOfServings,
-				calories: data.val().nutritionEstimates.find(obj => obj.attribute === 'ENERC_KCAL'),
-				fatKcal: data.val().nutritionEstimates.find(obj => obj.attribute === 'FAT_KCAL'),
-				totalFat: data.val().nutritionEstimates.find(obj => obj.attribute === 'FAT'),
-				satFat: data.val().nutritionEstimates.find(obj => obj.attribute === 'FASAT'),
-				puFat: data.val().nutritionEstimates.find(obj => obj.attribute === 'FAPU'),
-				muFat: data.val().nutritionEstimates.find(obj => obj.attribute === 'FAMS'),
-				protein: data.val().nutritionEstimates.find(obj => obj.attribute === 'PROCNT'),
-				totalCarb: data.val().nutritionEstimates.find(obj => obj.attribute === 'CHOCDF'),
-				dieteryFiber: data.val().nutritionEstimates.find(obj => obj.attribute === 'FIBTG'),
-				sugar: data.val().nutritionEstimates.find(obj => obj.attribute === 'SUGAR'),
-				cholesterol: data.val().nutritionEstimates.find(obj => obj.attribute === 'CHOLE'),
-				potassium: data.val().nutritionEstimates.find(obj => obj.attribute === 'K'),
-				vitA: data.val().nutritionEstimates.find(obj => obj.attribute === 'VITA_RAE'),
-				vitC: data.val().nutritionEstimates.find(obj => obj.attribute === 'VITC'),
-				calcium: data.val().nutritionEstimates.find(obj => obj.attribute === 'CA'),
-				iron: data.val().nutritionEstimates.find(obj => obj.attribute === 'FE'),
+				name: data[0].name,
+				photo: data[0].images[0].imageUrlsBySize[360],
+				ingredients: data[0].ingredientLines,
+				source: data[0].source.sourceRecipeUrl,
+				nutritions: data[0].nutritionEstimates,
+				rating: data[0].rating,
+				totalTime: data[0].totalTime,
+				nrservings: data[0].numberOfServings,
+				calories: data[0].nutritionEstimates.find(obj => obj.attribute === 'ENERC_KCAL'),
+				fatKcal: data[0].nutritionEstimates.find(obj => obj.attribute === 'FAT_KCAL'),
+				totalFat: data[0].nutritionEstimates.find(obj => obj.attribute === 'FAT'),
+				satFat: data[0].nutritionEstimates.find(obj => obj.attribute === 'FASAT'),
+				puFat: data[0].nutritionEstimates.find(obj => obj.attribute === 'FAPU'),
+				muFat: data[0].nutritionEstimates.find(obj => obj.attribute === 'FAMS'),
+				protein: data[0].nutritionEstimates.find(obj => obj.attribute === 'PROCNT'),
+				totalCarb: data[0].nutritionEstimates.find(obj => obj.attribute === 'CHOCDF'),
+				dieteryFiber: data[0].nutritionEstimates.find(obj => obj.attribute === 'FIBTG'),
+				sugar: data[0].nutritionEstimates.find(obj => obj.attribute === 'SUGAR'),
+				cholesterol: data[0].nutritionEstimates.find(obj => obj.attribute === 'CHOLE'),
+				potassium: data[0].nutritionEstimates.find(obj => obj.attribute === 'K'),
+				vitA: data[0].nutritionEstimates.find(obj => obj.attribute === 'VITA_RAE'),
+				vitC: data[0].nutritionEstimates.find(obj => obj.attribute === 'VITC'),
+				calcium: data[0].nutritionEstimates.find(obj => obj.attribute === 'CA'),
+				iron: data[0].nutritionEstimates.find(obj => obj.attribute === 'FE'),
 				_key: data.key
 			}
 		}).catch((error) => {
 			console.log("The read failed: " + error.message)
         }).then(() => {
+			console.log(recipeReceived)
 			this.setState({
 				recipe: recipeReceived,
 				loading: false
@@ -74,7 +83,7 @@ class Recipe extends Component {
     render() {
 		if (this.state.loading === true) {
 			return (
-				<MuiThemeProvider>
+				<MuiThemeProvider muiTheme={muiTheme}>
 					<div style={{ position: 'relative' }}>
 						<RefreshIndicator
 							size={50}
@@ -88,7 +97,7 @@ class Recipe extends Component {
 				)
 		} else {
 			return (
-			 	<MuiThemeProvider>
+			 	<MuiThemeProvider muiTheme={muiTheme}>
 					<List>
 						<p className="container" style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
 							<img src={this.state.recipe.photo} alt=''/>
