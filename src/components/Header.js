@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import AppBar from 'material-ui/AppBar'
-import { FlatButton, Drawer } from 'material-ui'
+import { FlatButton } from 'material-ui'
 import {blueGrey900} from 'material-ui/styles/colors'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
@@ -29,10 +29,6 @@ class Header extends Component {
                         iconElementRight={<FlatButton label='Log Out' containerElement={<Link to='/logout' />}/>}
                         onLeftIconButtonClick={this.handleToggle}
                     />
-                    <Drawer open={this.state.open}
-                        docked={false}
-                        onRequestChange={(open) => this.setState({open})}>
-                    </Drawer>
                     </div>
                     :<div>
                     <AppBar

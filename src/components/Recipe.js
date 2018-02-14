@@ -50,6 +50,7 @@ class Recipe extends Component {
 				sugar: data[0].nutritionEstimates.find(obj => obj.attribute === 'SUGAR'),
 				cholesterol: data[0].nutritionEstimates.find(obj => obj.attribute === 'CHOLE'),
 				potassium: data[0].nutritionEstimates.find(obj => obj.attribute === 'K'),
+				sodium: data[0].nutritionEstimates.find(obj => obj.attribute === 'NA'),
 				vitA: data[0].nutritionEstimates.find(obj => obj.attribute === 'VITA_RAE'),
 				vitC: data[0].nutritionEstimates.find(obj => obj.attribute === 'VITC'),
 				calcium: data[0].nutritionEstimates.find(obj => obj.attribute === 'CA'),
@@ -59,7 +60,6 @@ class Recipe extends Component {
 		}).catch((error) => {
 			console.log("The read failed: " + error.message)
         }).then(() => {
-			console.log(recipeReceived)
 			this.setState({
 				recipe: recipeReceived,
 				loading: false
@@ -114,7 +114,7 @@ class Recipe extends Component {
 							))}
 						/>
 						<RaisedButton label="Read Directions" primary={true} containerElement={<Link to={this.state.recipe.source} target="_blank"/>} style={{width:'100%'}}/>
-						<ListItem primaryText='Nutrition:'
+						<ListItem primaryText='Nutrient:'
 							primaryTogglesNestedList={true}
 							nestedItems = {[
 								<Table>
@@ -170,6 +170,11 @@ class Recipe extends Component {
 											<TableRowColumn>Cholesterol</TableRowColumn>
 											<TableRowColumn>{<span>{this.state.recipe.cholesterol ? <span>{this.state.recipe.cholesterol.value}</span> : '-'}</span>}</TableRowColumn>
 											<TableRowColumn>{<span>{this.state.recipe.cholesterol ? <span>{this.state.recipe.cholesterol.unit.abbreviation}</span> : '-'}</span>}</TableRowColumn>
+										</TableRow>
+										<TableRow>
+											<TableRowColumn>Sodium</TableRowColumn>
+											<TableRowColumn>{<span>{this.state.recipe.sodium ? <span>{this.state.recipe.sodium.value}</span> : '-'}</span>}</TableRowColumn>
+											<TableRowColumn>{<span>{this.state.recipe.sodium ? <span>{this.state.recipe.sodium.unit.abbreviation}</span> : '-'}</span>}</TableRowColumn>
 										</TableRow>
 										<TableRow>
 											<TableRowColumn>Potassium</TableRowColumn>

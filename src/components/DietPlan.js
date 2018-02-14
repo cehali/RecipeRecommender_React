@@ -23,18 +23,18 @@ const footerStyle = {
     fontSize: "20px",
     color: "white",
     textAlign: "center",
-    padding: "10px",
+    padding: "5px",
     position: "fixed",
     bottom: "0",
     left: "0",
-    height: "100px",
+    height: "200px",
     width: "auto%"
   };
   
 const phantomStyle = {
     display: "block",
-    padding: "20px",
-    height: "60px",
+    padding: "5px",
+    height: "200px",
     width: "auto%"
   };
   
@@ -45,8 +45,8 @@ function Footer({ children }) {
         <div style={footerStyle}>{children}</div>
       </div>
     );
-  }
-  
+}
+
 
 const API = 'https://reciperecommender-survey.ml:5000/similarecipes/'
 
@@ -57,18 +57,24 @@ class DietPlan extends Component {
             generated: false,
             loading: false,
             gender: null,
-            dietType: null,
             userEmail: this.props.location.state.userEmail,
             calorieIntake: 0,
+            nutrientLimits: [],
             breakfasts: [],
             lunches: [],
             soups: [],
             mainDishes: [],
             desserts: [], 
             currentCalorie: 0,
+            currentCholesterol: 0,
+            currentSodium: 0,
+            currentPotassium: 0,
             currentFat: 0,
+            currentsatFat: 0,
             currentProtein: 0,
             currentCarbs: 0,
+            currentSugars: 0,
+            currentDietary: 0,
             breakfastChosen: [],
             lunchChosen: [],
             soupChosen: [],
@@ -99,7 +105,6 @@ class DietPlan extends Component {
         query.once('value', function(snapshot) {
             snapshot.forEach(function(child) {
                 userReceived['gen'] = child.val().gender
-                userReceived['diet'] = child.val().dietType
                 userReceived['calorie'] = child.val().calorieIntake
                 _id = child.key
             });
@@ -116,6 +121,17 @@ class DietPlan extends Component {
     }
 
     getDietPlan = (email) => {
+        if (this.state.calorieIntake <= 2000){
+            this.setState({
+                //total fat, sat fat, cholesterol, sodium, potassium, total carb, sugars, fieber, protein 
+                nutrientLimits: [78, 20, 300, 2300, 4700, 275, 50, 28, 50]
+            })
+        } else {
+            this.setState({
+                //total fat, sat fat, cholesterol, sodium, potassium, total carb, sugars, fieber, protein 
+                nutrientLimits: [83, 25, 300, 2300, 4700, 350, 50, 33, 55]
+            })
+        }
         fetch(API + email)
         .then(response => response.json())
         .then(data => {
@@ -131,7 +147,7 @@ class DietPlan extends Component {
         })
     }
 
-    addBreakfast = (idx, itemKey, itemCalorie, itemFat, itemProtein, itemCarbs) => {
+    addBreakfast = (idx, itemKey, itemCalorie, itemCholesterol, itemSodium, itemPotassium, itemFat, itemSatFat, itemProtein, itemCarbs, itemSugars, itemDietary) => {
         let added = []
         added = this.state.chosenBr
         added[idx] = !(this.state.chosenBr[idx])
@@ -141,9 +157,15 @@ class DietPlan extends Component {
             this.setState({
                 chosenBr: added,
                 currentCalorie: this.state.currentCalorie + itemCalorie,
+                currentCholesterol: this.state.currentCholesterol + itemCholesterol,
+                currentSodium: this.state.currentSodium + itemSodium,
+                currentPotassium: this.state.currentPotassium + itemPotassium,
                 currentFat: this.state.currentFat + itemFat,
+                currentsatFat: this.state.currentsatFat + itemSatFat,
                 currentProtein: this.state.currentProtein + itemProtein,
                 currentCarbs: this.state.currentCarbs + itemCarbs,
+                currentSugars: this.state.currentSugars + itemSugars,
+                currentDietary: this.state.currentDietary + itemDietary,
                 breakfastChosen: breakfastChosenTemp
             })
         } else {
@@ -163,7 +185,7 @@ class DietPlan extends Component {
         }
     }
 
-    addLunch = (idx, itemKey, itemCalorie, itemFat, itemProtein, itemCarbs) => {
+    addLunch = (idx, itemKey, itemCalorie, itemCholesterol, itemSodium, itemPotassium, itemFat, itemSatFat, itemProtein, itemCarbs, itemSugars, itemDietary) => {
         let added = []
         added = this.state.chosenLu
         added[idx] = !(this.state.chosenLu[idx])
@@ -173,9 +195,15 @@ class DietPlan extends Component {
             this.setState({
                 chosenLu: added,
                 currentCalorie: this.state.currentCalorie + itemCalorie,
+                currentCholesterol: this.state.currentCholesterol + itemCholesterol,
+                currentSodium: this.state.currentSodium + itemSodium,
+                currentPotassium: this.state.currentPotassium + itemPotassium,
                 currentFat: this.state.currentFat + itemFat,
+                currentsatFat: this.state.currentsatFat + itemSatFat,
                 currentProtein: this.state.currentProtein + itemProtein,
                 currentCarbs: this.state.currentCarbs + itemCarbs,
+                currentSugars: this.state.currentSugars + itemSugars,
+                currentDietary: this.state.currentDietary + itemDietary,
                 lunchChosen: lunchChosenTemp
             })
         } else {
@@ -187,15 +215,21 @@ class DietPlan extends Component {
             this.setState({
                 chosenLu: added,
                 currentCalorie: this.state.currentCalorie - itemCalorie,
+                currentCholesterol: this.state.currentCholesterol - itemCholesterol,
+                currentSodium: this.state.currentSodium - itemSodium,
+                currentPotassium: this.state.currentPotassium - itemPotassium,
                 currentFat: this.state.currentFat - itemFat,
+                currentsatFat: this.state.currentsatFat - itemSatFat,
                 currentProtein: this.state.currentProtein - itemProtein,
                 currentCarbs: this.state.currentCarbs - itemCarbs,
+                currentSugars: this.state.currentSugars - itemSugars,
+                currentDietary: this.state.currentDietary - itemDietary,
                 lunchChosen: lunchChosenTemp
             })
         }
     }
 
-    addSoup = (idx, itemKey, itemCalorie, itemFat, itemProtein, itemCarbs) => {
+    addSoup = (idx, itemKey, itemCalorie, itemCholesterol, itemSodium, itemPotassium, itemFat, itemSatFat, itemProtein, itemCarbs, itemSugars, itemDietary) => {
         let added = []
         added = this.state.chosenSou
         added[idx] = !(this.state.chosenSou[idx])
@@ -205,9 +239,15 @@ class DietPlan extends Component {
             this.setState({
                 chosenSou: added,
                 currentCalorie: this.state.currentCalorie + itemCalorie,
+                currentCholesterol: this.state.currentCholesterol + itemCholesterol,
+                currentSodium: this.state.currentSodium + itemSodium,
+                currentPotassium: this.state.currentPotassium + itemPotassium,
                 currentFat: this.state.currentFat + itemFat,
+                currentsatFat: this.state.currentsatFat + itemSatFat,
                 currentProtein: this.state.currentProtein + itemProtein,
                 currentCarbs: this.state.currentCarbs + itemCarbs,
+                currentSugars: this.state.currentSugars + itemSugars,
+                currentDietary: this.state.currentDietary + itemDietary,
                 soupChosen: soupChosenTemp
             })
         } else {
@@ -219,15 +259,21 @@ class DietPlan extends Component {
             this.setState({
                 chosenSou: added,
                 currentCalorie: this.state.currentCalorie - itemCalorie,
+                currentCholesterol: this.state.currentCholesterol - itemCholesterol,
+                currentSodium: this.state.currentSodium - itemSodium,
+                currentPotassium: this.state.currentPotassium - itemPotassium,
                 currentFat: this.state.currentFat - itemFat,
+                currentsatFat: this.state.currentsatFat - itemSatFat,
                 currentProtein: this.state.currentProtein - itemProtein,
                 currentCarbs: this.state.currentCarbs - itemCarbs,
+                currentSugars: this.state.currentSugars - itemSugars,
+                currentDietary: this.state.currentDietary - itemDietary,
                 soupChosen: soupChosenTemp
             })
         }
     }
 
-    addMainDish = (idx, itemKey, itemCalorie, itemFat, itemProtein, itemCarbs) => {
+    addMainDish = (idx, itemKey, itemCalorie, itemCholesterol, itemSodium, itemPotassium, itemFat, itemSatFat, itemProtein, itemCarbs, itemSugars, itemDietary) => {
         let added = []
         added = this.state.chosenMa
         added[idx] = !(this.state.chosenMa[idx])
@@ -237,9 +283,15 @@ class DietPlan extends Component {
             this.setState({
                 chosenMa: added,
                 currentCalorie: this.state.currentCalorie + itemCalorie,
+                currentCholesterol: this.state.currentCholesterol + itemCholesterol,
+                currentSodium: this.state.currentSodium + itemSodium,
+                currentPotassium: this.state.currentPotassium + itemPotassium,
                 currentFat: this.state.currentFat + itemFat,
+                currentsatFat: this.state.currentsatFat + itemSatFat,
                 currentProtein: this.state.currentProtein + itemProtein,
                 currentCarbs: this.state.currentCarbs + itemCarbs,
+                currentSugars: this.state.currentSugars + itemSugars,
+                currentDietary: this.state.currentDietary + itemDietary,
                 mainDishChosen: mainDishChosenTemp
             })
         } else {
@@ -251,15 +303,21 @@ class DietPlan extends Component {
             this.setState({
                 chosenMa: added,
                 currentCalorie: this.state.currentCalorie - itemCalorie,
+                currentCholesterol: this.state.currentCholesterol - itemCholesterol,
+                currentSodium: this.state.currentSodium - itemSodium,
+                currentPotassium: this.state.currentPotassium - itemPotassium,
                 currentFat: this.state.currentFat - itemFat,
+                currentsatFat: this.state.currentsatFat - itemSatFat,
                 currentProtein: this.state.currentProtein - itemProtein,
                 currentCarbs: this.state.currentCarbs - itemCarbs,
+                currentSugars: this.state.currentSugars - itemSugars,
+                currentDietary: this.state.currentDietary - itemDietary,
                 mainDishChosen: mainDishChosenTemp
             })
         }
     }
 
-    addDessert = (idx, itemKey, itemCalorie, itemFat, itemProtein, itemCarbs) => {
+    addDessert = (idx, itemKey, itemCalorie, itemCholesterol, itemSodium, itemPotassium, itemFat, itemSatFat, itemProtein, itemCarbs, itemSugars, itemDietary) => {
         let added = []
         added = this.state.chosenDe
         added[idx] = !(this.state.chosenDe[idx])
@@ -269,9 +327,15 @@ class DietPlan extends Component {
             this.setState({
                 chosenDe: added,
                 currentCalorie: this.state.currentCalorie + itemCalorie,
+                currentCholesterol: this.state.currentCholesterol + itemCholesterol,
+                currentSodium: this.state.currentSodium + itemSodium,
+                currentPotassium: this.state.currentPotassium + itemPotassium,
                 currentFat: this.state.currentFat + itemFat,
+                currentsatFat: this.state.currentsatFat + itemSatFat,
                 currentProtein: this.state.currentProtein + itemProtein,
                 currentCarbs: this.state.currentCarbs + itemCarbs,
+                currentSugars: this.state.currentSugars + itemSugars,
+                currentDietary: this.state.currentDietary + itemDietary,
                 dessertChosen: dessertChosenTemp
             })
         } else {
@@ -283,9 +347,15 @@ class DietPlan extends Component {
             this.setState({
                 chosenDe: added,
                 currentCalorie: this.state.currentCalorie - itemCalorie,
+                currentCholesterol: this.state.currentCholesterol - itemCholesterol,
+                currentSodium: this.state.currentSodium - itemSodium,
+                currentPotassium: this.state.currentPotassium - itemPotassium,
                 currentFat: this.state.currentFat - itemFat,
+                currentsatFat: this.state.currentsatFat - itemSatFat,
                 currentProtein: this.state.currentProtein - itemProtein,
                 currentCarbs: this.state.currentCarbs - itemCarbs,
+                currentSugars: this.state.currentSugars - itemSugars,
+                currentDietary: this.state.currentDietary - itemDietary,
                 dessertChosen: dessertChosenTemp
             })
         }
@@ -299,9 +369,15 @@ class DietPlan extends Component {
             mainDish: this.state.mainDishChosen,
             dessert: this.state.dessertChosen,
             calorie: this.state.currentCalorie,
+            cholesterol: this.state.currentCholesterol,
+            sodium: this.state.currentSodium,
+            potassium: this.state.currentPotassium,
             fat: this.state.currentFat,
+            satFat: this.state.currentsatFat,
             protein: this.state.currentProtein,
-            carbs: this.state.currentCarbs
+            carbs: this.state.currentCarbs,
+            sugars: this.state.currentSugars,
+            dietary: this.state.currentDietary
         })
         this.props.history.push('/userprofile', {_id: this.state._id})
     }
@@ -350,32 +426,60 @@ class DietPlan extends Component {
                                             <TableRow>
                                                 <TableRowColumn>Calories</TableRowColumn>
                                                 <TableRowColumn>{parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'ENERC_KCAL').value, 10)}</TableRowColumn>
+                                                <TableRowColumn>Cholesterol</TableRowColumn>
+                                                <TableRowColumn>{parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'CHOLE').value, 10)}</TableRowColumn>
                                             </TableRow>
                                             <TableRow>
                                                 <TableRowColumn>Fat</TableRowColumn>
                                                 <TableRowColumn>{parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'FAT').value, 10)}</TableRowColumn>
+                                                <TableRowColumn>Saturated fat</TableRowColumn>
+                                                <TableRowColumn>{parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'FASAT').value, 10)}</TableRowColumn>
+                                            </TableRow>
+                                            <TableRow>
+                                                <TableRowColumn>Sodium</TableRowColumn>
+                                                <TableRowColumn>{parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'NA').value, 10)}</TableRowColumn>
+                                                <TableRowColumn>Potassium</TableRowColumn>
+                                                <TableRowColumn>{parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'K').value, 10)}</TableRowColumn>
                                             </TableRow>
                                             <TableRow>
                                                 <TableRowColumn>Protein</TableRowColumn>
                                                 <TableRowColumn>{parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'PROCNT').value, 10)}</TableRowColumn>
-                                            </TableRow>
-                                            <TableRow>
                                                 <TableRowColumn>Carbs</TableRowColumn>
                                                 <TableRowColumn>{parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'CHOCDF').value, 10)}</TableRowColumn>
                                             </TableRow>
+                                            <TableRow>
+                                                <TableRowColumn>Sugars</TableRowColumn>
+                                                <TableRowColumn>{parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'SUGAR').value, 10)}</TableRowColumn>
+                                                <TableRowColumn>Dietary fiber</TableRowColumn>
+                                                <TableRowColumn>{parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'FIBTG').value, 10)}</TableRowColumn>
+                                            </TableRow>
                                         </TableBody>
-                                    </Table>
+                                    </Table>(idx, itemKey, itemCalorie, itemCholesterol, itemSodium, itemPotassium, itemFat, itemSatFat, itemProtein, itemCarbs, itemSugars, itemDietary)
                                     {this.state.chosenBr[index] ?
-                                    <FloatingActionButton style={{position: 'absolute', right: 10, bottom: 15}} backgroundColor={green500} onClick={() => {this.addBreakfast(index, tile.key, parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'ENERC_KCAL').value, 10), 
-                                                            parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'FAT').value, 10), 
-                                                            parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'PROCNT').value, 10), 
-                                                            parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'CHOCDF').value, 10))}}>
+                                    <FloatingActionButton style={{position: 'absolute', right: 10, bottom: 15}} backgroundColor={green500} onClick={() => {this.addBreakfast(
+                                        index, tile.key, parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'ENERC_KCAL').value, 10), 
+                                        parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'CHOLE').value, 10),
+                                        parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'NA').value, 10),
+                                        parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'K').value, 10),
+                                        parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'FAT').value, 10),
+                                        parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'FASAT').value, 10),
+                                        parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'PROCNT').value, 10),
+                                        parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'CHOCDF').value, 10),
+                                        parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'SUGAR').value, 10),
+                                        parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'FIBTG').value, 10))}}>
                                         <ContentAdd />
                                     </FloatingActionButton>
-                                    :<FloatingActionButton style={{position: 'absolute', right: 10, bottom: 15}} onClick={() => {this.addBreakfast(index, tile.key, parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'ENERC_KCAL').value, 10), 
-                                                            parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'FAT').value, 10), 
-                                                            parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'PROCNT').value, 10), 
-                                                            parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'CHOCDF').value, 10))}}>
+                                    :<FloatingActionButton style={{position: 'absolute', right: 10, bottom: 15}} onClick={() => {this.addBreakfast(
+                                        index, tile.key, parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'ENERC_KCAL').value, 10), 
+                                        parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'CHOLE').value, 10),
+                                        parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'NA').value, 10),
+                                        parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'K').value, 10),
+                                        parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'FAT').value, 10),
+                                        parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'FASAT').value, 10),
+                                        parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'PROCNT').value, 10),
+                                        parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'CHOCDF').value, 10),
+                                        parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'SUGAR').value, 10),
+                                        parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'FIBTG').value, 10))}}>
                                         <ContentAdd />
                                     </FloatingActionButton>}
                                 </CardActions>
@@ -399,32 +503,58 @@ class DietPlan extends Component {
                                             <TableRow>
                                                 <TableRowColumn>Calories</TableRowColumn>
                                                 <TableRowColumn>{parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'ENERC_KCAL').value, 10)}</TableRowColumn>
+                                                <TableRowColumn>Cholesterol</TableRowColumn>
+                                                <TableRowColumn>{parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'CHOLE').value, 10)}</TableRowColumn>
                                             </TableRow>
                                             <TableRow>
                                                 <TableRowColumn>Fat</TableRowColumn>
                                                 <TableRowColumn>{parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'FAT').value, 10)}</TableRowColumn>
+                                                <TableRowColumn>Saturated fat</TableRowColumn>
+                                                <TableRowColumn>{parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'FASAT').value, 10)}</TableRowColumn>
+                                            </TableRow>
+                                            <TableRow>
+                                                <TableRowColumn>Sodium</TableRowColumn>
+                                                <TableRowColumn>{parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'NA').value, 10)}</TableRowColumn>
+                                                <TableRowColumn>Potassium</TableRowColumn>
+                                                <TableRowColumn>{parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'K').value, 10)}</TableRowColumn>
                                             </TableRow>
                                             <TableRow>
                                                 <TableRowColumn>Protein</TableRowColumn>
                                                 <TableRowColumn>{parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'PROCNT').value, 10)}</TableRowColumn>
-                                            </TableRow>
-                                            <TableRow>
                                                 <TableRowColumn>Carbs</TableRowColumn>
                                                 <TableRowColumn>{parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'CHOCDF').value, 10)}</TableRowColumn>
+                                            </TableRow>
+                                            <TableRow>
+                                                <TableRowColumn>Sugars</TableRowColumn>
+                                                <TableRowColumn>{parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'SUGAR').value, 10)}</TableRowColumn>
+                                                <TableRowColumn>Dietary fiber</TableRowColumn>
+                                                <TableRowColumn>{parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'FIBTG').value, 10)}</TableRowColumn>
                                             </TableRow>
                                         </TableBody>
                                     </Table>
                                     {this.state.chosenLu[index] ?
-                                    <FloatingActionButton style={{position: 'absolute', right: 10, bottom: 15}} backgroundColor={green500} onClick={() => {this.addLunch(index, tile.key, parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'ENERC_KCAL').value, 10), 
-                                                            parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'FAT').value, 10), 
-                                                            parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'PROCNT').value, 10), 
-                                                            parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'CHOCDF').value, 10))}}>
+                                    <FloatingActionButton style={{position: 'absolute', right: 10, bottom: 15}} backgroundColor={green500} onClick={() => {this.addLunch(                                        index, tile.key, parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'ENERC_KCAL').value, 10), 
+                                    parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'CHOLE').value, 10),
+                                    parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'NA').value, 10),
+                                    parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'K').value, 10),
+                                    parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'FAT').value, 10),
+                                    parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'FASAT').value, 10),
+                                    parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'PROCNT').value, 10),
+                                    parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'CHOCDF').value, 10),
+                                    parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'SUGAR').value, 10),
+                                    parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'FIBTG').value, 10))}}>
                                         <ContentAdd />
                                     </FloatingActionButton>
-                                    :<FloatingActionButton style={{position: 'absolute', right: 10, bottom: 15}} onClick={() => {this.addLunch(index, tile.key, parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'ENERC_KCAL').value, 10), 
-                                                            parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'FAT').value, 10), 
-                                                            parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'PROCNT').value, 10), 
-                                                            parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'CHOCDF').value, 10))}}>
+                                    :<FloatingActionButton style={{position: 'absolute', right: 10, bottom: 15}} onClick={() => {this.addLunch(                                        index, tile.key, parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'ENERC_KCAL').value, 10), 
+                                    parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'CHOLE').value, 10),
+                                    parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'NA').value, 10),
+                                    parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'K').value, 10),
+                                    parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'FAT').value, 10),
+                                    parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'FASAT').value, 10),
+                                    parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'PROCNT').value, 10),
+                                    parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'CHOCDF').value, 10),
+                                    parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'SUGAR').value, 10),
+                                    parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'FIBTG').value, 10))}}>
                                         <ContentAdd />
                                     </FloatingActionButton>}
                                 </CardActions>
@@ -443,37 +573,63 @@ class DietPlan extends Component {
                                     <img src={tile.images[0].imageUrlsBySize[360]} alt="" />
                                 </CardMedia>
                                 <CardActions>
-                                    <Table selectable={false}>
+                                <Table selectable={false}>
                                         <TableBody displayRowCheckbox={false}>
                                             <TableRow>
                                                 <TableRowColumn>Calories</TableRowColumn>
                                                 <TableRowColumn>{parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'ENERC_KCAL').value, 10)}</TableRowColumn>
+                                                <TableRowColumn>Cholesterol</TableRowColumn>
+                                                <TableRowColumn>{parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'CHOLE').value, 10)}</TableRowColumn>
                                             </TableRow>
                                             <TableRow>
                                                 <TableRowColumn>Fat</TableRowColumn>
                                                 <TableRowColumn>{parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'FAT').value, 10)}</TableRowColumn>
+                                                <TableRowColumn>Saturated fat</TableRowColumn>
+                                                <TableRowColumn>{parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'FASAT').value, 10)}</TableRowColumn>
+                                            </TableRow>
+                                            <TableRow>
+                                                <TableRowColumn>Sodium</TableRowColumn>
+                                                <TableRowColumn>{parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'NA').value, 10)}</TableRowColumn>
+                                                <TableRowColumn>Potassium</TableRowColumn>
+                                                <TableRowColumn>{parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'K').value, 10)}</TableRowColumn>
                                             </TableRow>
                                             <TableRow>
                                                 <TableRowColumn>Protein</TableRowColumn>
                                                 <TableRowColumn>{parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'PROCNT').value, 10)}</TableRowColumn>
-                                            </TableRow>
-                                            <TableRow>
                                                 <TableRowColumn>Carbs</TableRowColumn>
                                                 <TableRowColumn>{parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'CHOCDF').value, 10)}</TableRowColumn>
+                                            </TableRow>
+                                            <TableRow>
+                                                <TableRowColumn>Sugars</TableRowColumn>
+                                                <TableRowColumn>{parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'SUGAR').value, 10)}</TableRowColumn>
+                                                <TableRowColumn>Dietary fiber</TableRowColumn>
+                                                <TableRowColumn>{parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'FIBTG').value, 10)}</TableRowColumn>
                                             </TableRow>
                                         </TableBody>
                                     </Table>
                                     {this.state.chosenSou[index] ?
-                                    <FloatingActionButton style={{position: 'absolute', right: 10, bottom: 15}} backgroundColor={green500} onClick={() => {this.addSoup(index, tile.key, parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'ENERC_KCAL').value, 10), 
-                                                            parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'FAT').value, 10), 
-                                                            parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'PROCNT').value, 10), 
-                                                            parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'CHOCDF').value, 10))}}>
+                                    <FloatingActionButton style={{position: 'absolute', right: 10, bottom: 15}} backgroundColor={green500} onClick={() => {this.addSoup(                                        index, tile.key, parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'ENERC_KCAL').value, 10), 
+                                    parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'CHOLE').value, 10),
+                                    parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'NA').value, 10),
+                                    parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'K').value, 10),
+                                    parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'FAT').value, 10),
+                                    parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'FASAT').value, 10),
+                                    parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'PROCNT').value, 10),
+                                    parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'CHOCDF').value, 10),
+                                    parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'SUGAR').value, 10),
+                                    parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'FIBTG').value, 10))}}>
                                         <ContentAdd />
                                     </FloatingActionButton>
-                                    :<FloatingActionButton style={{position: 'absolute', right: 10, bottom: 15}} onClick={() => {this.addSoup(index, tile.key, parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'ENERC_KCAL').value, 10), 
-                                                            parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'FAT').value, 10), 
-                                                            parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'PROCNT').value, 10), 
-                                                            parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'CHOCDF').value, 10))}}>
+                                    :<FloatingActionButton style={{position: 'absolute', right: 10, bottom: 15}} onClick={() => {this.addSoup(                                        index, tile.key, parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'ENERC_KCAL').value, 10), 
+                                    parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'CHOLE').value, 10),
+                                    parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'NA').value, 10),
+                                    parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'K').value, 10),
+                                    parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'FAT').value, 10),
+                                    parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'FASAT').value, 10),
+                                    parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'PROCNT').value, 10),
+                                    parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'CHOCDF').value, 10),
+                                    parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'SUGAR').value, 10),
+                                    parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'FIBTG').value, 10))}}>
                                         <ContentAdd />
                                     </FloatingActionButton>}
                                 </CardActions>
@@ -492,37 +648,63 @@ class DietPlan extends Component {
                                     <img src={tile.images[0].imageUrlsBySize[360]} alt="" />
                                 </CardMedia>
                                 <CardActions>
-                                    <Table selectable={false}>
+                                <Table selectable={false}>
                                         <TableBody displayRowCheckbox={false}>
                                             <TableRow>
                                                 <TableRowColumn>Calories</TableRowColumn>
                                                 <TableRowColumn>{parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'ENERC_KCAL').value, 10)}</TableRowColumn>
+                                                <TableRowColumn>Cholesterol</TableRowColumn>
+                                                <TableRowColumn>{parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'CHOLE').value, 10)}</TableRowColumn>
                                             </TableRow>
                                             <TableRow>
                                                 <TableRowColumn>Fat</TableRowColumn>
                                                 <TableRowColumn>{parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'FAT').value, 10)}</TableRowColumn>
+                                                <TableRowColumn>Saturated fat</TableRowColumn>
+                                                <TableRowColumn>{parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'FASAT').value, 10)}</TableRowColumn>
+                                            </TableRow>
+                                            <TableRow>
+                                                <TableRowColumn>Sodium</TableRowColumn>
+                                                <TableRowColumn>{parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'NA').value, 10)}</TableRowColumn>
+                                                <TableRowColumn>Potassium</TableRowColumn>
+                                                <TableRowColumn>{parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'K').value, 10)}</TableRowColumn>
                                             </TableRow>
                                             <TableRow>
                                                 <TableRowColumn>Protein</TableRowColumn>
                                                 <TableRowColumn>{parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'PROCNT').value, 10)}</TableRowColumn>
-                                            </TableRow>
-                                            <TableRow>
                                                 <TableRowColumn>Carbs</TableRowColumn>
                                                 <TableRowColumn>{parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'CHOCDF').value, 10)}</TableRowColumn>
+                                            </TableRow>
+                                            <TableRow>
+                                                <TableRowColumn>Sugars</TableRowColumn>
+                                                <TableRowColumn>{parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'SUGAR').value, 10)}</TableRowColumn>
+                                                <TableRowColumn>Dietary fiber</TableRowColumn>
+                                                <TableRowColumn>{parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'FIBTG').value, 10)}</TableRowColumn>
                                             </TableRow>
                                         </TableBody>
                                     </Table>
                                     {this.state.chosenMa[index] ?
-                                    <FloatingActionButton style={{position: 'absolute', right: 10, bottom: 15}} backgroundColor={green500} onClick={() => {this.addMainDish(index, tile.key, parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'ENERC_KCAL').value, 10), 
-                                                            parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'FAT').value, 10), 
-                                                            parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'PROCNT').value, 10), 
-                                                            parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'CHOCDF').value, 10))}}>
+                                    <FloatingActionButton style={{position: 'absolute', right: 10, bottom: 15}} backgroundColor={green500} onClick={() => {this.addMainDish(                                        index, tile.key, parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'ENERC_KCAL').value, 10), 
+                                    parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'CHOLE').value, 10),
+                                    parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'NA').value, 10),
+                                    parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'K').value, 10),
+                                    parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'FAT').value, 10),
+                                    parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'FASAT').value, 10),
+                                    parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'PROCNT').value, 10),
+                                    parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'CHOCDF').value, 10),
+                                    parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'SUGAR').value, 10),
+                                    parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'FIBTG').value, 10))}}>
                                         <ContentAdd />
                                     </FloatingActionButton>
-                                    :<FloatingActionButton style={{position: 'absolute', right: 10, bottom: 15}} onClick={() => {this.addMainDish(index, tile.key, parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'ENERC_KCAL').value, 10), 
-                                                            parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'FAT').value, 10), 
-                                                            parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'PROCNT').value, 10), 
-                                                            parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'CHOCDF').value, 10))}}>
+                                    :<FloatingActionButton style={{position: 'absolute', right: 10, bottom: 15}} onClick={() => {this.addMainDish(                                        index, tile.key, parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'ENERC_KCAL').value, 10), 
+                                    parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'CHOLE').value, 10),
+                                    parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'NA').value, 10),
+                                    parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'K').value, 10),
+                                    parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'FAT').value, 10),
+                                    parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'FASAT').value, 10),
+                                    parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'PROCNT').value, 10),
+                                    parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'CHOCDF').value, 10),
+                                    parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'SUGAR').value, 10),
+                                    parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'FIBTG').value, 10))}}>
                                         <ContentAdd />
                                     </FloatingActionButton>}
                                 </CardActions>
@@ -541,37 +723,63 @@ class DietPlan extends Component {
                                     <img src={tile.images[0].imageUrlsBySize[360]} alt="" />
                                 </CardMedia>
                                 <CardActions>
-                                    <Table selectable={false}>
+                                <Table selectable={false}>
                                         <TableBody displayRowCheckbox={false}>
                                             <TableRow>
                                                 <TableRowColumn>Calories</TableRowColumn>
                                                 <TableRowColumn>{parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'ENERC_KCAL').value, 10)}</TableRowColumn>
+                                                <TableRowColumn>Cholesterol</TableRowColumn>
+                                                <TableRowColumn>{parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'CHOLE').value, 10)}</TableRowColumn>
                                             </TableRow>
                                             <TableRow>
                                                 <TableRowColumn>Fat</TableRowColumn>
                                                 <TableRowColumn>{parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'FAT').value, 10)}</TableRowColumn>
+                                                <TableRowColumn>Saturated fat</TableRowColumn>
+                                                <TableRowColumn>{parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'FASAT').value, 10)}</TableRowColumn>
+                                            </TableRow>
+                                            <TableRow>
+                                                <TableRowColumn>Sodium</TableRowColumn>
+                                                <TableRowColumn>{parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'NA').value, 10)}</TableRowColumn>
+                                                <TableRowColumn>Potassium</TableRowColumn>
+                                                <TableRowColumn>{parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'K').value, 10)}</TableRowColumn>
                                             </TableRow>
                                             <TableRow>
                                                 <TableRowColumn>Protein</TableRowColumn>
                                                 <TableRowColumn>{parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'PROCNT').value, 10)}</TableRowColumn>
-                                            </TableRow>
-                                            <TableRow>
                                                 <TableRowColumn>Carbs</TableRowColumn>
                                                 <TableRowColumn>{parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'CHOCDF').value, 10)}</TableRowColumn>
+                                            </TableRow>
+                                            <TableRow>
+                                                <TableRowColumn>Sugars</TableRowColumn>
+                                                <TableRowColumn>{parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'SUGAR').value, 10)}</TableRowColumn>
+                                                <TableRowColumn>Dietary fiber</TableRowColumn>
+                                                <TableRowColumn>{parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'FIBTG').value, 10)}</TableRowColumn>
                                             </TableRow>
                                         </TableBody>
                                     </Table>
                                     {this.state.chosenDe[index] ?
-                                    <FloatingActionButton style={{position: 'absolute', right: 10, bottom: 15}} backgroundColor={green500} onClick={() => {this.addDessert(index, tile.key, parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'ENERC_KCAL').value, 10), 
-                                                            parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'FAT').value, 10), 
-                                                            parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'PROCNT').value, 10), 
-                                                            parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'CHOCDF').value, 10))}}>
+                                    <FloatingActionButton style={{position: 'absolute', right: 10, bottom: 15}} backgroundColor={green500} onClick={() => {this.addDessert(                                        index, tile.key, parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'ENERC_KCAL').value, 10), 
+                                    parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'CHOLE').value, 10),
+                                    parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'NA').value, 10),
+                                    parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'K').value, 10),
+                                    parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'FAT').value, 10),
+                                    parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'FASAT').value, 10),
+                                    parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'PROCNT').value, 10),
+                                    parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'CHOCDF').value, 10),
+                                    parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'SUGAR').value, 10),
+                                    parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'FIBTG').value, 10))}}>
                                         <ContentAdd />
                                     </FloatingActionButton>
-                                    :<FloatingActionButton style={{position: 'absolute', right: 10, bottom: 15}} onClick={() => {this.addDessert(index, tile.key, parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'ENERC_KCAL').value, 10), 
-                                                            parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'FAT').value, 10), 
-                                                            parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'PROCNT').value, 10), 
-                                                            parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'CHOCDF').value, 10))}}> 
+                                    :<FloatingActionButton style={{position: 'absolute', right: 10, bottom: 15}} onClick={() => {this.addDessert(                                        index, tile.key, parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'ENERC_KCAL').value, 10), 
+                                    parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'CHOLE').value, 10),
+                                    parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'NA').value, 10),
+                                    parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'K').value, 10),
+                                    parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'FAT').value, 10),
+                                    parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'FASAT').value, 10),
+                                    parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'PROCNT').value, 10),
+                                    parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'CHOCDF').value, 10),
+                                    parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'SUGAR').value, 10),
+                                    parseInt(tile.nutritionEstimates.find(obj => obj.attribute === 'FIBTG').value, 10))}}>
                                         <ContentAdd />
                                     </FloatingActionButton>}
                                 </CardActions>
@@ -584,16 +792,32 @@ class DietPlan extends Component {
                                 <Table selectable={false}>
                                     <TableBody displayRowCheckbox={false}>
                                         <TableRow>
-                                            <TableRowColumn>Calorie limit:  {this.state.calorieIntake}</TableRowColumn>
-                                            <TableRowColumn>Calorie: {this.state.currentCalorie}</TableRowColumn>
-                                            <TableRowColumn>Fat limit:</TableRowColumn>
-                                            <TableRowColumn>Fat: {this.state.currentFat}</TableRowColumn>
+                                            <TableRowColumn>Calorie limit {this.state.calorieIntake}</TableRowColumn>
+                                            <TableRowColumn>Calorie {this.state.currentCalorie}</TableRowColumn>
+                                            <TableRowColumn>Cholesterol limit {this.state.nutrientLimits[2]}</TableRowColumn>
+                                            <TableRowColumn>Cholesterol {this.state.currentCholesterol}</TableRowColumn>
+                                            <TableRowColumn>Protein limit {this.state.nutrientLimits[8]}</TableRowColumn>
+                                            <TableRowColumn>Protein {this.state.currentProtein}</TableRowColumn>
                                         </TableRow>
                                         <TableRow>
-                                            <TableRowColumn>Protein limit:</TableRowColumn>
-                                            <TableRowColumn>Protein: {this.state.currentProtein}</TableRowColumn>
-                                            <TableRowColumn>Carbs limit:</TableRowColumn>
-                                            <TableRowColumn>Carbs {this.state.currentCarbs}</TableRowColumn>
+                                            <TableRowColumn>Fat limit {this.state.nutrientLimits[0]}</TableRowColumn>
+                                            <TableRowColumn>Fat {this.state.currentFat}</TableRowColumn>
+                                            <TableRowColumn>Saturated fat limit {this.state.nutrientLimits[1]}</TableRowColumn>
+                                            <TableRowColumn>Saturated fat {this.state.currentsatFat}</TableRowColumn>
+                                        </TableRow>
+                                        <TableRow>
+                                        <TableRowColumn>Sodium limit {this.state.nutrientLimits[3]}</TableRowColumn>
+                                            <TableRowColumn>Sodium {this.state.currentSodium}</TableRowColumn>
+                                            <TableRowColumn>Potassium limit {this.state.nutrientLimits[4]}</TableRowColumn>
+                                            <TableRowColumn>Potassium {this.state.currentPotassium}</TableRowColumn>
+                                        </TableRow>
+                                        <TableRow>
+                                            <TableRowColumn>Total carbs limit {this.state.nutrientLimits[5]}</TableRowColumn>
+                                            <TableRowColumn>Total carbs {this.state.currentCarbs}</TableRowColumn>
+                                            <TableRowColumn>Sugars limit {this.state.nutrientLimits[6]}</TableRowColumn>
+                                            <TableRowColumn>Sugars {this.state.currentSugars}</TableRowColumn>
+                                            <TableRowColumn>Dietary fiber limit {this.state.nutrientLimits[7]}</TableRowColumn>
+                                            <TableRowColumn>Dietary fiber {this.state.currentDietary}</TableRowColumn>
                                         </TableRow>
                                     </TableBody>
                                 </Table>
