@@ -38,7 +38,7 @@ class Survey extends Component {
             loading: true,
             nrStage: 0,
             recipesChosen: [],
-            ratings: [],
+            ratings: {},
             rateStars: [0, 0, 0, 0],
             dietType: this.props.location.state.dietType,
             gender: this.props.location.state.gender,
@@ -103,21 +103,14 @@ class Survey extends Component {
     }
 
     saveRates = (value, index, name) => {
-        let objIndex = this.state.ratings.findIndex((obj => obj._key === name))
-        if (objIndex !== -1) {
-            let tempArray = this.state.ratings.slice()
-            tempArray[objIndex].rating = value
-            this.setState({rating: tempArray})
-        } else {
-            let rate2Save = {_key: name, rating: value}
-            this.state.ratings.push(rate2Save)
-            this.setState({ratings: this.state.ratings})
-        }
+        let rate2Save = this.state.ratings   
+        rate2Save[name] = value
+        this.setState({ratings: rate2Save})
         let rate = this.state.rateStars.slice()
         rate[index] = value
         this.setState({rateStars : rate})
         let ratingsKeys = []
-        ratingsKeys = this.state.ratings.map(a => a._key)
+        ratingsKeys = Object.keys(this.state.ratings)
         let ratingsKeysSet = [...new Set(ratingsKeys)]
         if (arraysEqual(ratingsKeysSet.sort(), this.state.allrecipesKeys.sort())) {
             this.setState({canSubmit: true})

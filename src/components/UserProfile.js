@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { RefreshIndicator, Table, TableBody, TableRow, TableRowColumn, GridList, Subheader, GridTile } from 'material-ui'
+import { RefreshIndicator, Table, TableBody, TableRow, TableRowColumn, GridList, GridTile, Subheader } from 'material-ui'
 import { app } from '../base'
 import { Link } from 'react-router-dom'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
@@ -34,7 +34,10 @@ class DietPlan extends Component {
             carbs: null,
             sugars: null,
             dietary: null,
-            loading: true
+            loading: true, 
+            key: null,
+            rating: 0,
+            open: false
         }
     }
 
@@ -180,7 +183,7 @@ class DietPlan extends Component {
                                 <GridTile
                                 key={tile.key}
                                 title={tile.name}
-                                containerElement={<Link to={`/recipe/${tile.key}`}/>}
+                                containerElement={<Link to={{pathname: `/recipe/${tile.key}`, state: {_id: this.state._id}}}/>}
                                 >
                                 <img src={tile.images[0].imageUrlsBySize[360]} alt=''/>
                                 </GridTile>
@@ -197,7 +200,7 @@ class DietPlan extends Component {
                                 <GridTile
                                 key={tile.key}
                                 title={tile.name}
-                                containerElement={<Link to={`/recipe/${tile.key}`}/>}
+                                containerElement={<Link to={{pathname: `/recipe/${tile.key}`, state: {_id: this.state._id}}}/>}
                                 >
                                 <img src={tile.images[0].imageUrlsBySize[360]} alt=''/>
                                 </GridTile>
@@ -214,7 +217,7 @@ class DietPlan extends Component {
                                 <GridTile
                                 key={tile.key}
                                 title={tile.name}
-                                containerElement={<Link to={`/recipe/${tile.key}`}/>}
+                                containerElement={<Link to={{pathname: `/recipe/${tile.key}`, state: {_id: this.state._id}}}/>}
                                 >
                                 <img src={tile.images[0].imageUrlsBySize[360]} alt=''/>
                                 </GridTile>
@@ -231,7 +234,7 @@ class DietPlan extends Component {
                                 <GridTile
                                 key={tile.key}
                                 title={tile.name}
-                                containerElement={<Link to={`/recipe/${tile.key}`}/>}
+                                containerElement={<Link to={{pathname: `/recipe/${tile.key}`, state: {_id: this.state._id}}}/>}
                                 >
                                 <img src={tile.images[0].imageUrlsBySize[360]} alt=''/>
                                 </GridTile>
@@ -248,7 +251,7 @@ class DietPlan extends Component {
                                 <GridTile
                                 key={tile.key}
                                 title={tile.name}
-                                containerElement={<Link to={`/recipe/${tile.key}`}/>}
+                                containerElement={<Link to={{pathname: `/recipe/${tile.key}`, state: {_id: this.state._id}}}/>}
                                 >
                                 <img src={tile.images[0].imageUrlsBySize[360]} alt=''/>
                                 </GridTile>
@@ -256,35 +259,45 @@ class DietPlan extends Component {
                         </GridList>
                         <Table selectable={false}>
                             <TableBody displayRowCheckbox={false}>
-                                <TableRow>
+                            <TableRow>
                                     <TableRowColumn>Calories</TableRowColumn>
                                     <TableRowColumn>{this.state.calorie}</TableRowColumn>
+                                    <TableRowColumn>g</TableRowColumn>
                                     <TableRowColumn>Cholesterol</TableRowColumn>
                                     <TableRowColumn>{this.state.cholesterol}</TableRowColumn>
+                                    <TableRowColumn>g</TableRowColumn>
                                 </TableRow>
                                 <TableRow>
                                     <TableRowColumn>Fat</TableRowColumn>
                                     <TableRowColumn>{this.state.fat}</TableRowColumn>
+                                    <TableRowColumn>g</TableRowColumn>
                                     <TableRowColumn>Saturated fat:</TableRowColumn>
                                     <TableRowColumn>{this.state.satFat}</TableRowColumn>
+                                    <TableRowColumn>g</TableRowColumn>
                                 </TableRow>
                                 <TableRow>
                                     <TableRowColumn>Sodium</TableRowColumn>
                                     <TableRowColumn>{this.state.sodium}</TableRowColumn>
+                                    <TableRowColumn>g</TableRowColumn>
                                     <TableRowColumn>Potassium</TableRowColumn>
                                     <TableRowColumn>{this.state.potassium}</TableRowColumn>
+                                    <TableRowColumn>g</TableRowColumn>
                                 </TableRow>
                                 <TableRow>
                                     <TableRowColumn>Protein</TableRowColumn>
                                     <TableRowColumn>{this.state.protein}</TableRowColumn>
+                                    <TableRowColumn>g</TableRowColumn>
                                     <TableRowColumn>Total carbs</TableRowColumn>
                                     <TableRowColumn>{this.state.carbs}</TableRowColumn>
+                                    <TableRowColumn>g</TableRowColumn>
                                 </TableRow>
                                 <TableRow>
                                     <TableRowColumn>Sugars</TableRowColumn>
                                     <TableRowColumn>{this.state.sugars}</TableRowColumn>
+                                    <TableRowColumn>g</TableRowColumn>
                                     <TableRowColumn>Dietary fiber</TableRowColumn>
                                     <TableRowColumn>{this.state.dietary}</TableRowColumn>
+                                    <TableRowColumn>g</TableRowColumn>
                                 </TableRow>
                             </TableBody>
                         </Table>

@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
-import { List, ListItem, RefreshIndicator, Table, TableBody, TableRow, TableRowColumn, RaisedButton } from 'material-ui'
+import { List, ListItem, RefreshIndicator, Table, TableBody, TableRow, TableRowColumn, RaisedButton, FlatButton, Dialog } from 'material-ui'
 import { Link } from 'react-router-dom'
+import StarRatingComponent from 'react-star-rating-component'
+import { app } from '../base'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import {blueGrey900} from 'material-ui/styles/colors'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
@@ -19,8 +21,11 @@ class Recipe extends Component {
         this.state = {
 			recipe: {},
 			open: false,
-			loading: true
-        }
+			loading: true,
+			recipeId: this.props.match.params.recipeId,
+			_id: this.props.location.state
+		}
+		this.getItems = this.getItems.bind(this)
 	}
 
     getItems = () => {
@@ -65,20 +70,29 @@ class Recipe extends Component {
 				loading: false
 			});
         }); 
-      }
+    }
     
 	componentDidMount = () => {
 		this.getItems();
 	}
-
+	
 	handleOpen = () => {
-		this.setState({open: true});
+		this.setState({open: true})
+	}
+	
+	handleClose = () => {
+		this.setState({open: false})
+		let id = this.state._id['_id']
+		let key = this.state.recipeId
+		let value = this.state.rating
+		if (value > 0) {
+			app.database().ref(`users/${id}/ratings/`).child(key).set(value);
+		} 
 	}
 
-	handleClose = () => {
-		this.setState({open: false});
+	saveRates = (value, prevValue, name) => {
+        this.setState({rating: value})
 	}
-  
 
     render() {
 		if (this.state.loading === true) {
@@ -98,6 +112,25 @@ class Recipe extends Component {
 		} else {
 			return (
 			 	<MuiThemeProvider muiTheme={muiTheme}>
+				<div>
+					<Dialog
+						title='Rate the dish'
+						actions={<FlatButton
+							label='Submit'
+							primary={true}
+							keyboardFocused={true}
+							onClick={this.handleClose}
+						/>}
+						modal={false}
+						open={this.state.open}
+						onRequestClose={this.handleClose}>
+						<div style={{fontSize: '50px', textAlign: 'center'}}>
+						<StarRatingComponent
+							name='rating' 
+							starCount={5}
+							onStarClick={(value, prevValue, name) => this.saveRates(value, prevValue, name)}/>
+						</div>
+					</Dialog>
 					<List>
 						<p className="container" style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
 							<img src={this.state.recipe.photo} alt=''/>
@@ -106,6 +139,7 @@ class Recipe extends Component {
 						<ListItem primaryText={<span>{'Total time: '}{this.state.recipe.totalTime ? <span>{this.state.recipe.totalTime}</span> : '-'} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 							{'Servings: '}{this.state.recipe.nrservings ? <span>{this.state.recipe.nrservings}</span> : '-'} </span>}
 							disabled={true} style={{ textAlign: 'center' }}/>
+						<RaisedButton style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}} label='RATE THE DISH' onClick={this.handleOpen} primary={true}/>
 
 						<ListItem primaryText='Ingredients:'
 							primaryTogglesNestedList={true}
@@ -206,6 +240,7 @@ class Recipe extends Component {
 							]}
 						/>
 					</List>
+					</div>
 				</MuiThemeProvider>
 			)
 	

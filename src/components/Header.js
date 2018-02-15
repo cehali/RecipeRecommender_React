@@ -27,7 +27,7 @@ class Header extends Component {
                     <AppBar
                         title='RecipeRecommender'
                         iconElementRight={<FlatButton label='Log Out' containerElement={<Link to='/logout' />}/>}
-                        onLeftIconButtonClick={this.handleToggle}
+                        showMenuIconButton={false}
                     />
                     </div>
                     :<div>

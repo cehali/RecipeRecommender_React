@@ -55,7 +55,7 @@ class DietPlan extends Component {
         super(props);
         this.state = {
             generated: false,
-            loading: false,
+            loading: true,
             gender: null,
             userEmail: this.props.location.state.userEmail,
             calorieIntake: 0,
@@ -95,11 +95,12 @@ class DietPlan extends Component {
         this.addSoup = this.addSoup.bind(this)
         this.addMainDish = this.addMainDish.bind(this)
         this.addDessert = this.addDessert.bind(this)
+        this.showDietPlan = this.showDietPlan.bind(this)
     }
 
     getUser = () => {
         let userReceived = {}
-        let _id
+        let _id = null
         let email = this.state.userEmail
         let query = app.database().ref('users').orderByChild('email').equalTo(email)
         query.once('value', function(snapshot) {
@@ -114,13 +115,18 @@ class DietPlan extends Component {
                 dietType: userReceived.diet,
                 calorieIntake: userReceived.calorie,
                 _id: _id,
-                loading: true
+                loading: false
             })
-            this.getDietPlan(this.state.userEmail)
         })
     }
 
-    getDietPlan = (email) => {
+    componentDidMount = () => {
+    	this.getUser();
+    }
+
+    getDietPlan = () => {
+        let email = this.state.userEmail
+        this.setState({loading: true})
         if (this.state.calorieIntake <= 2000){
             this.setState({
                 //total fat, sat fat, cholesterol, sodium, potassium, total carb, sugars, fieber, protein 
@@ -381,6 +387,10 @@ class DietPlan extends Component {
         })
         this.props.history.push('/userprofile', {_id: this.state._id})
     }
+
+    showDietPlan = () => {
+        this.props.history.push('/userprofile', {_id: this.state._id})
+    }
     
     render() {
         if (this.state.loading === true) {
@@ -401,7 +411,8 @@ class DietPlan extends Component {
             if (this.state.generated === false) {
                 return (
                     <MuiThemeProvider muiTheme={muiTheme}>
-                        <RaisedButton label='GENERATE DIET PLAN' primary={true} onClick={this.getUser} style={buttonStyle} disabled={false}/>
+                        <RaisedButton label='GENERATE DIET PLAN' primary={true} onClick={this.getDietPlan} style={buttonStyle} disabled={false}/>
+                        <RaisedButton label='SHOW LAST DIET PLAN' primary={true} onClick={this.showDietPlan} style={buttonStyle} disabled={false}/>
                     </ MuiThemeProvider>
                 )
             } else {
