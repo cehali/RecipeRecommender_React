@@ -47,9 +47,6 @@ function Footer({ children }) {
     );
 }
 
-
-const API = 'https://reciperecommender-survey.ml:5000/similarecipes/'
-
 class DietPlan extends Component {
     constructor(props) {
         super(props);
@@ -89,7 +86,8 @@ class DietPlan extends Component {
             _id: null
         }
         this.getUser = this.getUser.bind(this)
-        this.getDietPlan = this.getDietPlan.bind(this)
+        this.getDietPlanSimilarity = this.getDietPlanSimilarity.bind(this)
+        this.getDietPlanALS = this.getDietPlanALS.bind(this)
         this.addBreakfast = this.addBreakfast.bind(this)
         this.addLunch = this.addLunch.bind(this)
         this.addSoup = this.addSoup.bind(this)
@@ -124,7 +122,7 @@ class DietPlan extends Component {
     	this.getUser();
     }
 
-    getDietPlan = () => {
+    getDietPlanSimilarity = () => {
         let email = this.state.userEmail
         this.setState({loading: true})
         if (this.state.calorieIntake <= 2000){
@@ -138,7 +136,7 @@ class DietPlan extends Component {
                 nutrientLimits: [83, 25, 300, 2300, 4700, 350, 50, 33, 55]
             })
         }
-        fetch(API + email)
+        fetch('https://reciperecommender-survey.ml:5000/similarecipes/' + email)
         .then(response => response.json())
         .then(data => {
             this.setState({
@@ -152,6 +150,36 @@ class DietPlan extends Component {
             })
         })
     }
+
+    getDietPlanALS = () => {
+        let email = this.state.userEmail
+        this.setState({loading: true})
+        if (this.state.calorieIntake <= 2000){
+            this.setState({
+                //total fat, sat fat, cholesterol, sodium, potassium, total carb, sugars, fieber, protein 
+                nutrientLimits: [78, 20, 300, 2300, 4700, 275, 50, 28, 50]
+            })
+        } else {
+            this.setState({
+                //total fat, sat fat, cholesterol, sodium, potassium, total carb, sugars, fieber, protein 
+                nutrientLimits: [83, 25, 300, 2300, 4700, 350, 50, 33, 55]
+            })
+        }
+        fetch('https://reciperecommender-survey.ml:5000/als/' + email)
+        .then(response => response.json())
+        .then(data => {
+            this.setState({
+                breakfasts: data[0],
+                lunches: data[1],
+                soups: data[2],
+                mainDishes: data[3],
+                desserts: data[4],
+                loading: false,
+                generated: true
+            })
+        })
+    }
+
 
     addBreakfast = (idx, itemKey, itemCalorie, itemCholesterol, itemSodium, itemPotassium, itemFat, itemSatFat, itemProtein, itemCarbs, itemSugars, itemDietary) => {
         let added = []
@@ -411,7 +439,8 @@ class DietPlan extends Component {
             if (this.state.generated === false) {
                 return (
                     <MuiThemeProvider muiTheme={muiTheme}>
-                        <RaisedButton label='GENERATE DIET PLAN' primary={true} onClick={this.getDietPlan} style={buttonStyle} disabled={false}/>
+                        <RaisedButton label='GENERATE DIET PLAN - SIMILARITY' primary={true} onClick={this.getDietPlanSimilarity} style={buttonStyle} disabled={false}/>
+                        <RaisedButton label='GENERATE DIET PLAN - ALS' primary={true} onClick={this.getDietPlanALS} style={buttonStyle} disabled={false}/>
                         <RaisedButton label='SHOW LAST DIET PLAN' primary={true} onClick={this.showDietPlan} style={buttonStyle} disabled={false}/>
                     </ MuiThemeProvider>
                 )

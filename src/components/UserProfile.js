@@ -36,8 +36,9 @@ class DietPlan extends Component {
             dietary: null,
             loading: true, 
             key: null,
-            rating: 0,
-            open: false
+            open: false,
+            calorieIntake: null,
+            nutrientLimits: []
         }
     }
 
@@ -58,8 +59,30 @@ class DietPlan extends Component {
         let sugars = null
         let dietary = null
         let _id = this.state._id
-        let query = app.database().ref(`users/${_id}/dietPlan`).limitToLast(1)
-        query.once('value', function(snapshot) {
+        let calorieIn = 0
+        let query1 = app.database().ref(`users/${_id}/calorieIntake`)
+        query1.once('value')  
+        .then(function(dataSnapshot) {
+            calorieIn = dataSnapshot.val()
+        }).then(() => {
+            if (calorieIn <= 2000){
+                console.log(calorieIn)
+                this.setState({
+                    //total fat, sat fat, cholesterol, sodium, potassium, total carb, sugars, fieber, protein 
+                    nutrientLimits: [78, 20, 300, 2300, 4700, 275, 50, 28, 50],
+                    calorieIntake: calorieIn
+                })
+            } else {
+                console.log(calorieIn)
+                this.setState({
+                    //total fat, sat fat, cholesterol, sodium, potassium, total carb, sugars, fieber, protein 
+                    nutrientLimits: [83, 25, 300, 2300, 4700, 350, 50, 33, 55],
+                    calorieIntake: calorieIn
+                })
+            }
+        })
+        let query2 = app.database().ref(`users/${_id}/dietPlan`).limitToLast(1)
+        query2.once('value', function(snapshot) {
             snapshot.forEach(function(child) {
                 breakfast = child.val().breakfast
                 lunch = child.val().lunch
@@ -144,7 +167,7 @@ class DietPlan extends Component {
                 protein: protein,
                 carbs: carbs,
                 sugars: sugars,
-                dietary: dietary,
+                dietary: dietary,                
             })
         })
     }
@@ -262,42 +285,52 @@ class DietPlan extends Component {
                             <TableRow>
                                     <TableRowColumn>Calories</TableRowColumn>
                                     <TableRowColumn>{this.state.calorie}</TableRowColumn>
-                                    <TableRowColumn>g</TableRowColumn>
+                                    <TableRowColumn>kcal</TableRowColumn>
+                                    <TableRowColumn>{Math.round(this.state.calorie*100/this.state.calorieIntake)}%</TableRowColumn>
                                     <TableRowColumn>Cholesterol</TableRowColumn>
                                     <TableRowColumn>{this.state.cholesterol}</TableRowColumn>
                                     <TableRowColumn>g</TableRowColumn>
+                                    <TableRowColumn>{Math.round(this.state.cholesterol*100/this.state.nutrientLimits[2])}%</TableRowColumn>
                                 </TableRow>
                                 <TableRow>
                                     <TableRowColumn>Fat</TableRowColumn>
                                     <TableRowColumn>{this.state.fat}</TableRowColumn>
                                     <TableRowColumn>g</TableRowColumn>
-                                    <TableRowColumn>Saturated fat:</TableRowColumn>
+                                    <TableRowColumn>{Math.round(this.state.fat*100/this.state.nutrientLimits[0])}%</TableRowColumn>
+                                    <TableRowColumn>Saturated fat</TableRowColumn>
                                     <TableRowColumn>{this.state.satFat}</TableRowColumn>
                                     <TableRowColumn>g</TableRowColumn>
+                                    <TableRowColumn>{Math.round(this.state.satFat*100/this.state.nutrientLimits[1])}%</TableRowColumn>
                                 </TableRow>
                                 <TableRow>
                                     <TableRowColumn>Sodium</TableRowColumn>
                                     <TableRowColumn>{this.state.sodium}</TableRowColumn>
                                     <TableRowColumn>g</TableRowColumn>
+                                    <TableRowColumn>{Math.round(this.state.sodium*100/this.state.nutrientLimits[3])}%</TableRowColumn>
                                     <TableRowColumn>Potassium</TableRowColumn>
                                     <TableRowColumn>{this.state.potassium}</TableRowColumn>
                                     <TableRowColumn>g</TableRowColumn>
+                                    <TableRowColumn>{Math.round(this.state.potassium*100/this.state.nutrientLimits[4])}%</TableRowColumn>
                                 </TableRow>
                                 <TableRow>
                                     <TableRowColumn>Protein</TableRowColumn>
                                     <TableRowColumn>{this.state.protein}</TableRowColumn>
                                     <TableRowColumn>g</TableRowColumn>
+                                    <TableRowColumn>{Math.round(this.state.protein*100/this.state.nutrientLimits[8])}%</TableRowColumn>
                                     <TableRowColumn>Total carbs</TableRowColumn>
                                     <TableRowColumn>{this.state.carbs}</TableRowColumn>
                                     <TableRowColumn>g</TableRowColumn>
+                                    <TableRowColumn>{Math.round(this.state.carbs*100/this.state.nutrientLimits[5])}%</TableRowColumn>
                                 </TableRow>
                                 <TableRow>
                                     <TableRowColumn>Sugars</TableRowColumn>
                                     <TableRowColumn>{this.state.sugars}</TableRowColumn>
                                     <TableRowColumn>g</TableRowColumn>
+                                    <TableRowColumn>{Math.round(this.state.sugars*100/this.state.nutrientLimits[6])}%</TableRowColumn>
                                     <TableRowColumn>Dietary fiber</TableRowColumn>
                                     <TableRowColumn>{this.state.dietary}</TableRowColumn>
                                     <TableRowColumn>g</TableRowColumn>
+                                    <TableRowColumn>{Math.round(this.state.dietary*100/this.state.nutrientLimits[7])}%</TableRowColumn>
                                 </TableRow>
                             </TableBody>
                         </Table>
@@ -308,4 +341,4 @@ class DietPlan extends Component {
     }
 }
 
-export default DietPlan;
+export default DietPlan
